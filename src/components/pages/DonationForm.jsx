@@ -1,5 +1,5 @@
 import '../../scss/forComponents/Donation.scss';
-import IPhone from '../../assets/IPhone.png';
+import IPhone from '../../assets/iPhone.png';
 import Button from '../Button';
 import { BsSquare, BsCheckSquare } from 'react-icons/bs';
 import { useState } from 'react';
