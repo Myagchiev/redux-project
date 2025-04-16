@@ -6,12 +6,26 @@
   .catalog-preview {
     padding: 75px 0;
 
+    @media (max-width: 1023px) {
+      padding: 60px 0;
+    }
+
+    @media (max-width: 767px) {
+      padding: 40px 0;
+    }
+
     h2 {
       font-family: 'Gilroy', sans-serif;
       font-weight: 500;
       font-size: 18px;
       margin-bottom: 30px;
       color: $text-color;
+
+      @media (max-width: 767px) {
+        font-size: 16px;
+        margin-bottom: 20px;
+        padding: 0 15px;
+      }
     }
 
     &__grid {
@@ -21,15 +35,18 @@
       width: 100%;
       box-sizing: border-box;
 
+      @media (max-width: 1023px) {
+        gap: 15px;
+      }
+
       &.mobile-slider {
         @media (max-width: 767px) {
           display: flex !important;
+          justify-content: center;
           flex-wrap: wrap !important;
           overflow-x: auto !important;
           scroll-snap-type: x mandatory;
           -webkit-overflow-scrolling: touch;
-          padding: 0 0 20px;
-          margin: 0;
           width: 100%;
 
           &::-webkit-scrollbar {
@@ -37,14 +54,12 @@
           }
 
           .catalog-preview__card {
-            flex: 0 0 80%;
             min-width: 250px;
             scroll-snap-align: start;
-            margin-right: 15px;
             height: 350px;
 
             &:last-child {
-              margin-right: 0;
+              margin-right: 15px;
             }
           }
         }
@@ -62,6 +77,18 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       transition: transform 0.3s;
       box-sizing: border-box;
+      flex: 1 1 calc(25% - 15px);
+
+      @media (max-width: 1023px) {
+        flex: 1 1 calc(33.333% - 10px);
+        height: 380px;
+      }
+
+      @media (max-width: 767px) {
+        flex: 1 1 calc(50% - 8px);
+        height: 350px;
+        padding: 15px 15px 0;
+      }
 
       &:hover {
         transform: translateY(-5px);
@@ -69,12 +96,19 @@
 
       img.catalog-preview__image {
         padding-bottom: 15px;
+        width: 100%;
+        height: auto;
+        object-fit: cover;
       }
 
       h3 {
         font-family: 'Gilroy', sans-serif;
         font-weight: 600;
         font-size: 24px;
+
+        @media (max-width: 1023px) {
+          font-size: 20px;
+        }
       }
 
       &:first-child {
@@ -89,6 +123,10 @@
         font-size: 14px;
         color: $gray-color;
         padding: 5px 0 0;
+
+        @media (max-width: 767px) {
+          font-size: 13px;
+        }
       }
     }
   }
@@ -103,12 +141,18 @@
 
     &__image {
       border-radius: 10px;
+      width: 100%;
+      height: auto;
     }
 
     h3 {
       font-family: 'Gilroy', sans-serif;
       font-weight: 600;
       font-size: 24px;
+
+      @media (max-width: 767px) {
+        font-size: 20px;
+      }
     }
 
     p {
@@ -116,15 +160,28 @@
       font-weight: 400;
       font-size: 16px;
       color: $gray-color;
+
+      @media (max-width: 767px) {
+        font-size: 14px;
+      }
     }
   }
 
   .category-section {
     padding: 40px 0;
 
+    @media (max-width: 767px) {
+      padding: 30px 0;
+    }
+
     &__header {
       display: flex;
       gap: 30px;
+
+      @media (max-width: 767px) {
+        gap: 15px;
+        padding: 0 15px;
+      }
     }
 
     h2 {
@@ -133,6 +190,11 @@
       font-size: 18px;
       margin-bottom: 30px;
       color: $text-color;
+
+      @media (max-width: 767px) {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
     }
 
     &__more {
@@ -145,6 +207,11 @@
       color: $green-color;
       text-decoration: none;
       transition: color 0.3s;
+
+      @media (max-width: 767px) {
+        font-size: 16px;
+        margin-bottom: 20px;
+      }
 
       svg {
         margin-left: 5px;
@@ -160,25 +227,14 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
       gap: 20px;
+
+      @media (max-width: 1023px) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+      }
     }
 
     @media (max-width: 767px) {
-      padding: 30px 0;
-
-      &__header {
-        gap: 15px;
-        padding: 0 15px;
-      }
-
-      h2 {
-        margin-bottom: 20px;
-      }
-
-      &__more {
-        font-size: 16px;
-        margin-bottom: 20px;
-      }
-
       &__grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;

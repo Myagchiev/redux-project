@@ -2,10 +2,10 @@
 
 .donation {
   background-color: $main-green-color;
-  height: auto;
   position: relative;
   margin-top: 60px;
   padding: 40px 0;
+  height: auto;
 
   .container {
     display: flex;
@@ -58,7 +58,6 @@
 
       input {
         background-color: transparent;
-        width: 100%;
         padding: 12px 15px;
         border: 1px solid #fff;
         border-radius: 10px;
@@ -83,7 +82,7 @@
         }
         &[type="number"] {
           -moz-appearance: textfield;
-          appearance: none; 
+          appearance: none;
         }
       }
     }
@@ -97,7 +96,7 @@
     }
   }
 
-  @media (min-width: 768px) {
+  @media (min-width: 1024px) {
     height: 360px;
     margin-top: 112px;
     padding: 0;
@@ -149,9 +148,102 @@
       
       .donation__image {
         display: block;
-        position: absolute;
-        bottom: 0;
-        right: 25%;
+      }
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    height: 320px;
+    margin-top: 80px;
+    padding: 0;
+
+    .container {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    &__left {
+      width: auto;
+      
+      h2 {
+        font-size: 30px;
+        margin: 50px 0 30px 0;
+        text-align: left;
+      }
+
+      .checkboxes {
+        flex-direction: row;
+        gap: 20px;
+        margin-bottom: 25px;
+
+        label {
+          font-size: 16px;
+
+          .checkbox-icon {
+            width: 20px;
+            height: 20px;
+          }
+        }
+      }
+
+      .donation__input {
+        flex-direction: row;
+        gap: 15px;
+
+        input {
+          width: 160px;
+          padding: 12px;
+          font-size: 16px;
+        }
+      }
+    }
+
+    &__right {
+      display: block;
+      
+      .donation__image {
+        display: block;
+        max-width: 300px;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    margin-top: 40px;
+    padding: 30px 10px;
+
+    .container {
+      gap: 20px;
+    }
+
+    &__left {
+      h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+
+      .checkboxes {
+        gap: 12px;
+        margin-bottom: 20px;
+
+        label {
+          font-size: 14px;
+
+          .checkbox-icon {
+            width: 18px;
+            height: 18px;
+          }
+        }
+      }
+
+      .donation__input {
+        gap: 12px;
+
+        input {
+          padding: 10px 12px;
+          font-size: 14px;
+        }
       }
     }
   }

@@ -58,15 +58,24 @@ const Navbar = () => {
     const results = [];
     Object.keys(products).forEach((category) => {
       if (category === 'bird') return;
-      const product = products[category][0];
-      if (product.name.toLowerCase().includes(query.toLowerCase())) {
-        results.push({
-          id: `${category}-${product.id}`,
-          name: product.name,
-          category,
-          image: product.image,
-        });
-      }
+      products[category].forEach((product) => {
+        const categoryName =
+          categories.find((cat) => cat.path === `/catalog/${category}`)?.name ||
+          category;
+        if (
+          product.name.toLowerCase().includes(query.toLowerCase()) ||
+          (product.description &&
+            product.description.toLowerCase().includes(query.toLowerCase())) ||
+          categoryName.toLowerCase().includes(query.toLowerCase())
+        ) {
+          results.push({
+            id: `${category}-${product.id}`,
+            name: product.name,
+            category,
+            image: product.image,
+          });
+        }
+      });
     });
     setSearchResults(results.slice(0, 5));
   };
@@ -145,7 +154,7 @@ const Navbar = () => {
             >
               Каталог {isCatalogOpen ? <IoIosArrowUp /> : <IoIosArrowDown />}
               {isCatalogOpen && (
-                <ul className="dropdown">
+                <ul className={`dropdown ${isCatalogOpen ? 'open' : ''}`}>
                   {categories.map((item) => (
                     <li key={item.path}>
                       <Link

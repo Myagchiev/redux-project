@@ -1,12 +1,22 @@
 @mixin card-base {
-    border: 1px solid $input-color;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 8px 8px 15px 0px #0000000D;
-    animation: fadeIn 0.5s ease-in-out;
-    transition: transform 0.3s;
-  
+  border: 1px solid $input-color;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 8px 8px 15px 0px #0000000D;
+  animation: fadeIn 0.5s ease-in-out;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+
+  @media (max-width: 480px) {
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 4px 4px 10px 0px #0000000D;
+    
     &:hover {
-      transform: translateY(-5px);
+      transform: none;
     }
   }
+}

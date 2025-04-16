@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   gap: $spacing-xs;
-  margin: $spacing-xl 0 $spacing-xl 0;
+  margin: $spacing-xl 0;
 
   &__arrow {
     border: none;
@@ -47,6 +47,25 @@
 
     &:hover:not(.active) {
       color: $main-green-color;
+    }
+  }
+
+  @media (max-width: 480px) {
+    gap: $spacing-xs;
+    flex-wrap: wrap;
+    margin: $spacing-lg 0;
+
+    &__arrow {
+      font-size: 18px;
+    }
+
+    &__number {
+      font-size: 16px;
+      padding: 4px 6px;
+
+      &.active {
+        font-size: 18px;
+      }
     }
   }
 }

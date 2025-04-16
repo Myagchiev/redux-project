@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import '../scss/forComponents/Button.scss';
 
 const Button = ({
@@ -12,6 +13,18 @@ const Button = ({
   margin = '0',
   ...props
 }) => {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 767px)');
+    setIsMobile(mediaQuery.matches);
+
+    const handleResize = () => setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleResize);
+
+    return () => mediaQuery.removeEventListener('change', handleResize);
+  }, []);
+
   return (
     <button
       className="custom-button"
@@ -22,7 +35,7 @@ const Button = ({
         backgroundColor,
         color,
         border,
-        margin,
+        margin: isMobile ? '10px 0 0' : margin,
         borderColor,
       }}
       {...props}

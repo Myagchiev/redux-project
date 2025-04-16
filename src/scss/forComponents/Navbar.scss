@@ -71,10 +71,7 @@ $hover-bg: #f5f5f5;
           width: 24px;
           transition: color 0.3s;
 
-          &.active {
-            color: $main-green-color;
-          }
-
+          &.active,
           &:hover {
             color: $main-green-color;
           }
@@ -251,7 +248,6 @@ $hover-bg: #f5f5f5;
     }
   }
 
-  /* Планшет */
   @media (max-width: 768px) {
     .topRow {
       padding: 15px 0;
@@ -330,24 +326,24 @@ $hover-bg: #f5f5f5;
     }
   }
 
-  /* Телефон */
   @media (max-width: 480px) {
     .topRow {
       padding: 10px 0;
+      justify-content: space-around;
 
       .logo img {
         height: 30px;
       }
 
       .topRight {
-        gap: 10px;
+        gap: 15px;
 
         .mobile-menu-toggle {
           display: block;
         }
 
         .phone {
-          display: none; /* Показываем в мобильном меню */
+          display: none;
         }
 
         .cartIcon,
@@ -367,7 +363,7 @@ $hover-bg: #f5f5f5;
 
     .bottomRow {
       .navLinks {
-        display: none; /* Скрываем по умолчанию */
+        display: none;
         position: fixed;
         top: 0;
         left: 0;
@@ -382,6 +378,7 @@ $hover-bg: #f5f5f5;
         pointer-events: none;
         transition: transform 0.3s ease, opacity 0.3s ease;
         z-index: 100;
+        overflow-y: auto;
 
         &.active {
           transform: translateX(0);
@@ -406,6 +403,13 @@ $hover-bg: #f5f5f5;
             box-shadow: none;
             padding: 10px 0;
             border-radius: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+
+            &.open {
+              max-height: 300px;
+            }
 
             li {
               margin-bottom: 10px;
@@ -454,8 +458,12 @@ $hover-bg: #f5f5f5;
       }
 
       .desktop-search {
-        display: none; /* Поиск только в мобильном меню */
+        display: none;
       }
     }
   }
+}
+
+body.menu-open {
+  overflow: hidden;
 }

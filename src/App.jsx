@@ -40,7 +40,8 @@ function App() {
         <Route path="/donations" element={<DonationPage />} />
         <Route path="/login" element={<LoginPage orders={orders} />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/not-found" element={<div>Страница не найдена</div>} />
+        <Route path="*" element={<Navigate to="/not-found" replace />} />
       </Routes>
       <Footer />
     </>

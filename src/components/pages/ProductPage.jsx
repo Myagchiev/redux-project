@@ -20,7 +20,9 @@ const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [showNotification, setShowNotification] = useState(false);
 
+  console.log('ProductPage: Category:', category, 'ID:', id); // Отладка
   const product = products[category]?.find((item) => item.id.toString() === id);
+  console.log('Found product:', product); // Отладка
 
   // Вспомогательная функция для получения случайных рекомендаций
   const getRandomRecommendations = (category, count = 4) => {
@@ -258,7 +260,9 @@ const ProductPage = () => {
                 text="Добавить в корзину"
                 backgroundColor="white"
                 color="var(--main-green-color)"
-                border="1px solid var(--main-green-color)"
+                border="1px solid var(--main-green-color
+
+)"
                 onClick={handleAddToCart}
               />
             </div>

@@ -3,27 +3,33 @@
 @import '../styles/base/animations';
 
 .custom-button {
-  // Базовые стили, которые нельзя переопределить через пропсы
-  border: 1px solid $border-color; // Граница по умолчанию
-  border-radius: 10px; // Радиус по умолчанию
-  font-family: 'Gilroy', sans-serif; // Шрифт
-  font-weight: 600; // Вес шрифта
-  font-size: 18px; // Размер шрифта
+  border: 1px solid $border-color;
+  border-radius: 10px;
+  font-family: 'Gilroy', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px; // Расстояние между элементами внутри (если будет иконка)
+  gap: 10px;
   outline: none;
-  min-width: 161px; // Минимальная ширина по умолчанию
+  min-width: 161px;
   min-height: 45px;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
 
-  // Эффект при наведении
+  @media (max-width: 768px) {
+    font-size: 16px;
+    min-width: 140px;
+    min-height: 40px;
+    padding: 10px 20px;
+  }
+
   &:hover {
     background-color: darken($main-green-color, 10%);
   }
 
-  // Убираем стандартные стили кнопки
   &:focus {
     outline: none;
   }

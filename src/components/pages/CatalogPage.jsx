@@ -16,7 +16,7 @@ const CatalogPage = () => {
     if (!baseProduct) return [];
     return Array.from({ length: 24 }, (_, index) => ({
       ...baseProduct,
-      id: `${baseProduct.id}-${index}`,
+      id: baseProduct.id, // Используем оригинальный id
     }));
   }, [baseProduct]);
 

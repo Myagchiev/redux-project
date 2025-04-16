@@ -60,6 +60,7 @@
 
     @media (max-width: 768px) {
       flex-direction: column;
+      padding: 0 10px;
 
       .about-page__image {
         flex: none;
@@ -77,6 +78,9 @@
       max-width: 800px;
       margin: 0 auto;
     }
+    @media (max-width: 768px) {
+      padding: 0 10px;
+    }
   }
 
   &__team {
@@ -87,6 +91,7 @@
 
       @media (max-width: 768px) {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        padding: 0 10px;
       }
 
       @media (max-width: 480px) {

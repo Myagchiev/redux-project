@@ -63,6 +63,9 @@
 
   &__image {
     border-radius: 10px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
   }
 
   &__actions {
@@ -101,6 +104,49 @@
 
     &:hover {
       color: $main-green-color;
+    }
+  }
+
+  @media (max-width: 480px) {
+    max-width: 100%;
+    padding: $spacing-sm;
+    gap: $spacing-sm;
+
+    h3 {
+      font-size: 18px;
+    }
+
+    &__description {
+      font-size: 14px;
+      margin-top: 0;
+    }
+
+    &__price {
+      font-size: 18px;
+    }
+
+    &__weights {
+      flex-wrap: wrap;
+      gap: 8px;
+
+      .weight-option {
+        font-size: 14px;
+        padding: 4px 8px;
+      }
+    }
+
+    &__actions {
+      align-items: stretch;
+    }
+
+    .cart_div {
+      width: 100%;
+      justify-content: center;
+    }
+
+    &__cart-icon {
+      width: 22px;
+      height: 22px;
     }
   }
 }

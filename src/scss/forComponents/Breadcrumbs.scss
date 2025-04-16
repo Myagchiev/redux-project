@@ -11,12 +11,22 @@
   font-size: 18px;
   font-weight: 500;
   margin: 75px 0 30px 0;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+    gap: 4px;
+    margin: 40px 0 20px 10px;
+  }
 }
 
 .breadcrumb-item {
   display: flex;
   align-items: center;
   gap: 10px;
+
+  @media (max-width: 768px) {
+    gap: 4px;
+  }
 }
 
 .breadcrumb-link {
@@ -24,6 +34,10 @@
   text-decoration: none;
   font-weight: 500;
   transition: color 0.3s;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 
   &:hover {
     color: $main-green-color;
@@ -33,10 +47,18 @@
 .breadcrumb-current {
   color: $main-green-color;
   font-weight: 600;
+
+  @media (max-width: 768px) {
+    font-size: 14px;
+  }
 }
 
 .breadcrumb-separator {
   color: $gray-color;
+
+  @media (max-width: 768px) {
+    margin: 0 4px;
+  }
 }
 
 .breadcrumbs__back {
@@ -53,6 +75,11 @@
   transition: color 0.3s;
   margin: 0 0 40px 0;
 
+  @media (max-width: 768px) {
+    font-size: 16px;
+    margin: 0 0 30px 0;
+  }
+
   &:hover:not(:disabled) {
     color: $main-green-color;
   }
@@ -64,16 +91,5 @@
 
   .arrowBack {
     color: $main-green-color;
-  }
-}
-
-@media (max-width: 768px) {
-  .breadcrumbs {
-    font-size: 14px;
-    gap: 4px;
-  }
-  
-  .breadcrumb-separator {
-    margin: 0 4px;
   }
 }

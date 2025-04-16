@@ -347,7 +347,6 @@ const LoginPage = ({ orders: propOrders }) => {
       <div className="container">
         <div className="titles">
           <p>Аккаунт</p>
-          <p>Ваши заказы</p>
         </div>
         <div className="profile-wrapper">
           <div className="profile-left">
@@ -377,67 +376,74 @@ const LoginPage = ({ orders: propOrders }) => {
           </div>
           <div className="profile-right">
             {orders.length === 0 ? (
-              <p>У вас нет заказов</p>
+              <p className="emptyCart">У вас нет заказов</p>
             ) : (
-              <div className="orders-list">
-                {orders.map((order) => (
-                  <div
-                    key={order.id}
-                    className="order-item"
-                    onClick={() => handleCardClick(order.id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <p>
-                      <strong>Заказ от {order.date}</strong>
-                    </p>
-                    <div className="order-summary">
+              <>
+                <h2 className="fillCart">Ваши заказы</h2>
+                <div className="orders-list">
+                  {orders.map((order) => (
+                    <div
+                      key={order.id}
+                      className="order-item"
+                      onClick={() => handleCardClick(order.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <p>
-                        <strong>Итого: {order.total} ₽</strong>
+                        <strong>Заказ от {order.date}</strong>
                       </p>
-                      <div className="order-status">
-                        <p>Статус: В обработке</p>
-                        <Button
-                          text="Отменить заказ"
-                          backgroundColor="red"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleCancelOrder(order.id);
-                          }}
-                        />
-                      </div>
-                    </div>
-                    {order.items.map((item) => (
-                      <div
-                        key={`${item.id}-${item.weight}`}
-                        className="cart-item"
-                      >
-                        <img
-                          src={item.image}
-                          alt={item.name}
-                          className="cart-item__image"
-                        />
-                        <div className="cart-item__details">
-                          <h3>{item.name}</h3>
-                          <p>Вес: {item.weight}</p>
-                          <p>Цена за единицу: {item.price} ₽</p>
-                          <p>Количество: {item.quantity}</p>
-                        </div>
-                        <div className="cart-item__actions">
-                          <p>{item.price * item.quantity} ₽</p>
+                      <div className="order-summary">
+                        <p>
+                          <strong>Итого: {order.total} ₽</strong>
+                        </p>
+                        <div className="order-status">
+                          <p>Статус: В обработке</p>
                           <Button
-                            text="Отменить"
+                            text="Отменить заказ"
                             backgroundColor="red"
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleCancelItem(order.id, item.id, item.weight);
+                              handleCancelOrder(order.id);
                             }}
                           />
                         </div>
                       </div>
-                    ))}
-                  </div>
-                ))}
-              </div>
+                      {order.items.map((item) => (
+                        <div
+                          key={`${item.id}-${item.weight}`}
+                          className="cart-item"
+                        >
+                          <img
+                            src={item.image}
+                            alt={item.name}
+                            className="cart-item__image"
+                          />
+                          <div className="cart-item__details">
+                            <h3>{item.name}</h3>
+                            <p>Вес: {item.weight}</p>
+                            <p>Цена за единицу: {item.price} ₽</p>
+                            <p>Количество: {item.quantity}</p>
+                          </div>
+                          <div className="cart-item__actions">
+                            <p>{item.price * item.quantity} ₽</p>
+                            <Button
+                              text="Отменить"
+                              backgroundColor="red"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCancelItem(
+                                  order.id,
+                                  item.id,
+                                  item.weight
+                                );
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </div>
+              </>
             )}
           </div>
         </div>
