@@ -1,5 +1,6 @@
 import Breadcrumbs from '../Breadcrumbs';
 import DonationForm from './DonationForm';
+import donat from '../../assets/donation-banner.jpg';
 import Button from '../Button';
 import '../../scss/forComponents/DonationPage.scss';
 
@@ -12,7 +13,7 @@ const DonationPage = () => {
 
         {/* Баннер */}
         <div className="donation-page__banner">
-          <img src="/src/assets/donation-banner.jpg" alt="Поддержите проект" />
+          <img src={donat} alt="Поддержите проект" />
           <div className="banner-text">
             <h2>Поддержите наших пернатых друзей</h2>
             <p>Ваши пожертвования помогают нам улучшать жизнь птиц!</p>

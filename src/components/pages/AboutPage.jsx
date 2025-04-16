@@ -1,5 +1,9 @@
 import Breadcrumbs from '../Breadcrumbs';
 import Button from '../Button';
+import about from '../../assets/about-intro.jpg';
+import anna from '../../assets/team-anna.jpg';
+import ivan from '../../assets/team-ivan.jpg';
+import maria from '../../assets/team-maria.jpg';
 import '../../scss/forComponents/AboutPage.scss';
 
 const AboutPage = () => {
@@ -26,7 +30,7 @@ const AboutPage = () => {
             />
           </div>
           <div className="about-page__image">
-            <img src="/src/assets/about-intro.jpg" alt="О нас" />
+            <img src={about} alt="О нас" />
           </div>
         </div>
 
@@ -47,17 +51,17 @@ const AboutPage = () => {
               {
                 name: 'Анна',
                 role: 'Основатель',
-                image: '/src/assets/team-anna.jpg',
+                image: anna,
               },
               {
                 name: 'Иван',
                 role: 'Орнитолог',
-                image: '/src/assets/team-ivan.jpg',
+                image: ivan,
               },
               {
                 name: 'Мария',
                 role: 'Дизайнер',
-                image: '/src/assets/team-maria.jpg',
+                image: maria,
               },
             ].map((member, index) => (
               <div
