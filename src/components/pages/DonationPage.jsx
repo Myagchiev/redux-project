@@ -11,7 +11,6 @@ const DonationPage = () => {
       <div className="container">
         <h1 className="donation-page__title">Пожертвования</h1>
 
-        {/* Баннер */}
         <div className="donation-page__banner">
           <img src={donat} alt="Поддержите проект" />
           <div className="banner-text">
@@ -22,11 +21,11 @@ const DonationPage = () => {
               backgroundColor="var(--main-green-color)"
               color="#fff"
               padding="12px 30px"
+              onClick={() => alert('ага!')}
             />
           </div>
         </div>
 
-        {/* Информация */}
         <div className="donation-page__info">
           <h2>Куда идут ваши деньги</h2>
           <p>

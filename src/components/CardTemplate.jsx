@@ -7,7 +7,6 @@ const CardTemplate = ({
   description,
   children,
 }) => {
-  // Поддерживаем строку, массив или undefined
   const descriptionParts = Array.isArray(description)
     ? description
     : typeof description === 'string'

@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import Breadcrumbs from '../Breadcrumbs';
 import '../../scss/forComponents/PaymentDeliveryPage.scss';
 

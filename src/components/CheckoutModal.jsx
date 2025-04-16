@@ -204,7 +204,6 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
       paymentMethod: '',
       agreement: '',
     });
-    // Вызываем onConfirm только на шаге 4, чтобы перенаправить на /payment-delivery
     if (step === 4) {
       onConfirm();
     }

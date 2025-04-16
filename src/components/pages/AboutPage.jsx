@@ -11,10 +11,8 @@ const AboutPage = () => {
     <section className="about-page">
       <Breadcrumbs />
       <div className="container">
-        {/* Заголовок */}
         <h1 className="about-page__title">О проекте</h1>
 
-        {/* Секция "О нас" */}
         <div className="about-page__section about-page__intro">
           <div className="about-page__content">
             <h2>Кто мы такие</h2>
@@ -34,7 +32,6 @@ const AboutPage = () => {
           </div>
         </div>
 
-        {/* Секция "Миссия" */}
         <div className="about-page__section about-page__mission">
           <h2>Наша миссия</h2>
           <p className="mission-text">
@@ -43,7 +40,6 @@ const AboutPage = () => {
           </p>
         </div>
 
-        {/* Секция "Команда" */}
         <div className="about-page__section about-page__team">
           <h2>Наша команда</h2>
           <div className="team-grid">

@@ -1,4 +1,4 @@
-import { useMemo } from 'react'; // Изменение 1: Импорт useMemo
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { IoIosArrowDown } from 'react-icons/io';
 import ProductCard from '../ProductCard';
@@ -12,7 +12,6 @@ import '../../scss/forComponents/Home.scss';
 
 const Home = () => {
   const catalogItems = useMemo(
-    // Изменение 2: Мемоизация catalogItems
     () => [
       {
         name: 'Кормушки',
@@ -28,7 +27,7 @@ const Home = () => {
       {
         name: 'Отдельные виды кормов',
         description: '(зёрен)',
-        path: '/catalog/grains',
+        path: '/catalog/otdelnye-vidy-kormov',
         image: catalogFeeds,
       },
     ],
@@ -40,10 +39,10 @@ const Home = () => {
     if (!baseProduct) {
       return [];
     }
-    return Array.from({ length: count }, (_, index) => ({
+    return Array(count).fill({
       ...baseProduct,
       id: baseProduct.id,
-    }));
+    });
   };
 
   const getRandomItems = (array, count = 4) => {
@@ -55,7 +54,6 @@ const Home = () => {
   };
 
   const productsData = useMemo(
-    // Изменение 3: Обновление productsData с useMemo
     () => ({
       mixesProducts: getCategoryProducts('gotovye-miksy'),
       birdsProducts: getRandomItems(products.bird),
@@ -66,7 +64,6 @@ const Home = () => {
   );
 
   const sections = useMemo(
-    // Изменение 4: Мемоизация sections
     () => [
       {
         title: 'Готовые миксы',

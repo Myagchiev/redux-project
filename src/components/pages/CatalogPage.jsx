@@ -10,6 +10,25 @@ const CatalogPage = () => {
   const { category } = useParams();
   const baseProduct = products[category]?.[0];
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const categoryProducts = useMemo(() => {
+    if (!baseProduct) return [];
+    return Array.from({ length: 24 }, (_, index) => ({
+      ...baseProduct,
+      id: `${baseProduct.id}-${index}`,
+    }));
+  }, [baseProduct]);
+
+  const itemsPerPage = 8;
+  const totalPages = Math.ceil(categoryProducts.length / itemsPerPage);
+
+  const displayProducts = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return categoryProducts.slice(startIndex, endIndex);
+  }, [currentPage, categoryProducts]);
+
   if (!products[category] || !baseProduct) {
     return (
       <section className="catalog-page">
@@ -21,23 +40,6 @@ const CatalogPage = () => {
       </section>
     );
   }
-
-  const categoryProducts = useMemo(() => {
-    return Array.from({ length: 24 }, (_, index) => ({
-      ...baseProduct,
-      id: baseProduct.id, // Используем оригинальный id
-    }));
-  }, [baseProduct, category]);
-
-  const itemsPerPage = 8;
-  const totalPages = Math.ceil(categoryProducts.length / itemsPerPage);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const displayProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return categoryProducts.slice(startIndex, endIndex);
-  }, [currentPage, categoryProducts]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);

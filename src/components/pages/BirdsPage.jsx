@@ -9,7 +9,7 @@ const BirdsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
 
-  // Дублируем птиц до 24
+  // дублирование карточек
   const extendedBirds = [];
   const originalBirds = products.bird || [];
   for (let i = 0; extendedBirds.length < 24 && originalBirds.length > 0; i++) {
@@ -29,7 +29,7 @@ const BirdsPage = () => {
 
   return (
     <div className="birds-page container">
-      <Breadcrumbs /> {/* Добавлено */}
+      <Breadcrumbs />
       <h2>Птицы</h2>
       <div className="birds-grid">
         {paginatedItems.map((bird) => (

@@ -22,6 +22,60 @@ const ProductPage = () => {
 
   const product = products[category]?.find((item) => item.id.toString() === id);
 
+  // Вспомогательная функция для получения случайных рекомендаций
+  const getRandomRecommendations = (category, count = 4) => {
+    if (!category) return [];
+    const allCategories = Object.keys(products).filter(
+      (cat) => cat !== category && cat !== 'bird'
+    );
+    const recommendations = [];
+
+    // Собираем все доступные продукты из подходящих категорий
+    const availableProducts = allCategories
+      .flatMap((cat) =>
+        products[cat].map((prod) => ({
+          ...prod,
+          id: prod.id,
+          category: cat,
+        }))
+      )
+      .filter((prod) => prod); // Убираем undefined
+
+    // Перемешиваем продукты и берём первые count
+    const shuffledProducts = [...availableProducts].sort(
+      () => Math.random() - 0.5
+    );
+    for (let i = 0; i < Math.min(count, shuffledProducts.length); i++) {
+      recommendations.push(shuffledProducts[i]);
+    }
+
+    return recommendations;
+  };
+
+  // Рекомендации для "С этим товаром смотрят"
+  const viewedProducts = useMemo(
+    () => getRandomRecommendations(category),
+    [category]
+  );
+
+  // Рекомендации для "С этим товаром покупают"
+  const boughtProducts = useMemo(
+    () => getRandomRecommendations(category),
+    [category]
+  );
+
+  // Проверка на отсутствие products или product
+  if (!products || Object.keys(products).length === 0) {
+    return (
+      <section className="product-page">
+        <Breadcrumbs />
+        <div className="container">
+          <p>Данные загружаются...</p>
+        </div>
+      </section>
+    );
+  }
+
   if (!product) {
     return (
       <section className="product-page">
@@ -69,40 +123,6 @@ const ProductPage = () => {
     handleAddToCart();
     navigate('/cart');
   };
-
-  const getRecommendations = useMemo(() => {
-    const allCategories = Object.keys(products).filter(
-      (cat) => cat !== category && cat !== 'bird'
-    );
-    const recommendations = [];
-
-    while (recommendations.length < 4 && allCategories.length > 0) {
-      const randomCategory =
-        allCategories[Math.floor(Math.random() * allCategories.length)];
-      const categoryProducts = products[randomCategory];
-      if (categoryProducts && categoryProducts.length > 0) {
-        const randomProduct =
-          categoryProducts[Math.floor(Math.random() * categoryProducts.length)];
-        if (
-          !recommendations.some(
-            (p) => p.id === randomProduct.id && p.category === randomCategory
-          )
-        ) {
-          recommendations.push({
-            ...randomProduct,
-            id: randomProduct.id,
-            category: randomCategory,
-          });
-        }
-      }
-      allCategories.splice(allCategories.indexOf(randomCategory), 1);
-    }
-
-    return recommendations;
-  }, [category]);
-
-  const viewedProducts = getRecommendations;
-  const boughtProducts = getRecommendations;
 
   const getAvatarSliders = () => {
     const sliders = [];
@@ -161,7 +181,7 @@ const ProductPage = () => {
           <AvatarSlider
             key="birds2"
             items={product.relatedMixes}
-            title="Виды миксов, которыесодержат данный вид зерна"
+            title="Виды миксов, которые содержат данный вид зерна"
           />
         );
       }
@@ -172,16 +192,7 @@ const ProductPage = () => {
       if (relatedGrains.length) {
         sliders.push(
           <AvatarSlider
-            key="grains1"
-            items={relatedGrains.map((grain) => ({
-              id: grain.id,
-              name: grain.name,
-              image: grain.image,
-            }))}
-            title="Виды зёрен, которыми питаются данные птицы"
-          />,
-          <AvatarSlider
-            key="grains2"
+            key="grains"
             items={relatedGrains.map((grain) => ({
               id: grain.id,
               name: grain.name,

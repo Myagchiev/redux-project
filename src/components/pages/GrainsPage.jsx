@@ -7,21 +7,20 @@ import '../../scss/forComponents/CatalogPages.scss';
 
 const GrainsPage = () => {
   const category = 'grains';
-  const categoryProducts = products.grains || [];
 
-  // Дублируем зёрна до 24
-  const extendedProducts = [];
-  for (
-    let i = 0;
-    extendedProducts.length < 24 && categoryProducts.length > 0;
-    i++
-  ) {
-    const product = categoryProducts[i % categoryProducts.length];
-    extendedProducts.push({
-      ...product,
-      id: `${product.id}-${extendedProducts.length}`, // Уникальный ID
-    });
-  }
+  const categoryProducts = useMemo(() => products.grains || [], []);
+
+  const extendedProducts = useMemo(() => {
+    const result = [];
+    for (let i = 0; result.length < 24 && categoryProducts.length > 0; i++) {
+      const product = categoryProducts[i % categoryProducts.length];
+      result.push({
+        ...product,
+        id: `${product.id}-${result.length}`,
+      });
+    }
+    return result;
+  }, [categoryProducts]);
 
   const itemsPerPage = 8;
   const totalPages = Math.ceil(extendedProducts.length / itemsPerPage);
@@ -61,7 +60,7 @@ const GrainsPage = () => {
               showWeights={true}
               showCart={true}
               showPrice={true}
-              id={product.id.split('-')[0]} // Используем оригинальный ID
+              id={product.id.split('-')[0]}
               category={category}
               isBird={false}
               style={{ animationDelay: `${index * 0.1}s` }}

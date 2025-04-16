@@ -36,7 +36,7 @@ const LoginPage = ({ orders: propOrders }) => {
 
   useEffect(() => {
     console.log('propOrders in LoginPage:', propOrders);
-    setOrders(propOrders); // Показываем все заказы из propOrders
+    setOrders(propOrders);
   }, [propOrders]);
 
   const validatePhone = (value) => {

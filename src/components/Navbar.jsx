@@ -23,11 +23,9 @@ const Navbar = () => {
   const cartItemsCount = useSelector((state) => state.cart?.itemsCount || 0);
 
   useEffect(() => {
-    // Проверка авторизации
     const savedUser = localStorage.getItem('user');
     setIsAuthenticated(!!savedUser);
 
-    // Закрытие меню/поиска при клике вне
     const handleClickOutside = (event) => {
       if (catalogRef.current && !catalogRef.current.contains(event.target)) {
         setIsCatalogOpen(false);
@@ -59,7 +57,7 @@ const Navbar = () => {
 
     const results = [];
     Object.keys(products).forEach((category) => {
-      if (category === 'bird') return; // Пропускаем птиц
+      if (category === 'bird') return;
       const product = products[category][0];
       if (product.name.toLowerCase().includes(query.toLowerCase())) {
         results.push({
@@ -70,7 +68,7 @@ const Navbar = () => {
         });
       }
     });
-    setSearchResults(results.slice(0, 5)); // Ограничиваем до 5 результатов
+    setSearchResults(results.slice(0, 5));
   };
 
   const handleSearchSubmit = (e) => {
