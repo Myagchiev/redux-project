@@ -1,0 +1,135 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+
+.product-page {
+  &__weights {
+    display: flex;
+    gap: 10px;
+
+    .weight-option {
+      background-color: $main-color;
+      border: 1px solid $main-color;
+      border-radius: 5px;
+      padding: 6px 16px;
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 500;
+      font-size: 20px;
+      color: $text-color;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &.active {
+        background-color: #fff;
+        border-color: $main-green-color;
+      }
+    }
+  }
+
+  &__price {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    color: $text-color;
+    margin: 25px 0;
+  }
+
+  &__quantity {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 500;
+    font-size: 18px;
+    color: $border-color;
+    margin-bottom: 25px;
+
+    button {
+      width: 26px;
+      height: 26px;
+      border: 1px solid $main-green-color;
+      border-radius: 5px;
+      background: none;
+      font-size: 20px;
+      color: $main-green-color;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover:not(:disabled) {
+        background-color: $main-green-color;
+        color: #fff;
+        border-color: $main-green-color;
+        transform: scale(0.95);
+      }
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    p {
+      margin-bottom: 15px;
+    }
+
+    span {
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 500;
+      font-size: 24px;
+      color: $text-color;
+      margin: 10px;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 20px;
+  }
+}
+
+.bird-card {
+  @include card-base;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  text-decoration: none;
+  color: $text-color;
+
+  &__image {
+    border-radius: 10px;
+  }
+
+  h3 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  p {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: $gray-color;
+  }
+}
+
+.avatar-sliders {
+  padding: 40px 0 0 0;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.recommendations {
+  margin: 100px 0;
+
+  h2 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    margin-bottom: 25px;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+}

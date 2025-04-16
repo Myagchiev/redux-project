@@ -1,0 +1,75 @@
+$main-green-color: #3FCF5E;
+$green-color: #219653;
+$main-color: #F9F9F9;
+$text-color: #4F4F4F;
+$input-color: #F2F2F2;
+$border-color: #BDBDBD;
+$gray-color: #828282;
+$dark-gray-color: #333333;
+$white-color: #fff;
+$shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+$spacing-xs: 10px;
+$spacing-sm: 20px;
+$spacing-md: 30px;
+$spacing-lg: 40px;
+$spacing-xl: 50px;
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('../../fonts/Gilroy-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('../../fonts/Gilroy-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('../../fonts/Gilroy-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('../../fonts/Gilroy-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('../../fonts/Gilroy-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
+.container {
+    width: 1320px;
+    margin: 0 auto;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  
+  @media (max-width: 767px) {
+    .container {
+      width: 100%;
+      margin: 0;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .container {
+      width: 100%;
+      margin: 0;
+    }
+  }

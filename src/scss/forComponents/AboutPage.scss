@@ -1,0 +1,140 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+.about-page {
+
+  &__title {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 700;
+    font-size: 48px;
+    color: $text-color;
+    margin-bottom: 40px;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  &__section {
+    margin-bottom: 60px;
+    animation: fadeIn 0.5s ease-in-out;
+
+    h2 {
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 600;
+      font-size: 36px;
+      color: $text-color;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: $gray-color;
+      line-height: 1.5;
+    }
+  }
+
+  &__intro {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+
+    .about-page__content {
+      flex: 1;
+
+      p {
+        margin-bottom: 20px;
+        max-width: 500px;
+      }
+    }
+
+    .about-page__image {
+      flex: 0 0 700px;
+
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 8px 8px 15px 0px #0000000D;
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+
+      .about-page__image {
+        flex: none;
+        width: 100%;
+      }
+    }
+  }
+
+  &__mission {
+    text-align: center;
+
+    .mission-text {
+      font-size: 24px;
+      color: $main-green-color;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
+
+  &__team {
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      }
+
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .team-card {
+      border: 1px solid $border-color;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 8px 8px 15px 0px #0000000D;
+      animation: fadeIn 0.5s ease-in-out;
+
+      &__image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+      }
+
+      h3 {
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        color: $text-color;
+      }
+
+      p {
+        font-size: 16px;
+        color: $gray-color;
+      }
+
+      &:hover {
+        transform: translateY(-5px);
+        transition: transform 0.3s;
+      }
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+}

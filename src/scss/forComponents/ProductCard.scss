@@ -1,0 +1,106 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+
+.product-card {
+  @include card-base;
+  max-height: 566px;
+  max-width: 315px;
+  display: flex;
+  flex-direction: column;
+  text-align: start;
+  gap: $spacing-md;
+
+  h3 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 130%;
+    color: $text-color;
+  }
+
+  &__description {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 130%;
+    color: $gray-color;
+    margin: -20px 0 0 0;
+  }
+
+  &__price {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    color: $text-color;
+  }
+
+  &__weights {
+    display: flex;
+    justify-content: space-around;
+
+    .weight-option {
+      background-color: $main-color;
+      border: 1px solid $main-color;
+      border-radius: 5px;
+      padding: 4px 9px;
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &.active {
+        background-color: $white-color;
+        border-color: $main-green-color;
+      }
+
+      &:hover:not(.active) {
+        background-color: lighten($main-green-color, 30%);
+      }
+    }
+  }
+
+  &__image {
+    border-radius: 10px;
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $spacing-sm;
+
+    a {
+      text-decoration: none !important;
+      color: inherit !important;
+    }
+  }
+
+  .cart_div {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    border-radius: 10px;
+    padding: 9px 10px 9px 9px;
+    background-color: $white-color;
+    border: 1px solid $border-color;
+
+    &:active {
+      background-color: darken($main-color, 1%);
+      border-color: $main-green-color;
+      cursor: pointer;
+    }
+  }
+
+  &__cart-icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    color: $text-color;
+
+    &:hover {
+      color: $main-green-color;
+    }
+  }
+}

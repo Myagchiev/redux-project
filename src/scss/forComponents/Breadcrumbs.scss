@@ -1,0 +1,79 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  font-family: 'Gilroy', sans-serif;
+  font-size: 18px;
+  font-weight: 500;
+  margin: 75px 0 30px 0;
+}
+
+.breadcrumb-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.breadcrumb-link {
+  color: $gray-color;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+
+  &:hover {
+    color: $main-green-color;
+  }
+}
+
+.breadcrumb-current {
+  color: $main-green-color;
+  font-weight: 600;
+}
+
+.breadcrumb-separator {
+  color: $gray-color;
+}
+
+.breadcrumbs__back {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: none;
+  background: none;
+  font-family: 'Gilroy', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: black;
+  cursor: pointer;
+  transition: color 0.3s;
+  margin: 0 0 40px 0;
+
+  &:hover:not(:disabled) {
+    color: $main-green-color;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .arrowBack {
+    color: $main-green-color;
+  }
+}
+
+@media (max-width: 768px) {
+  .breadcrumbs {
+    font-size: 14px;
+    gap: 4px;
+  }
+  
+  .breadcrumb-separator {
+    margin: 0 4px;
+  }
+}

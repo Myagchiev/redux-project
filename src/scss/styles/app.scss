@@ -1,0 +1,15 @@
+@import './base/variables';
+@import './normalize';
+
+:root {
+    background-color: $main-color;
+
+  --main-green-color: #{$main-green-color};
+  --main-color: #{$main-color};
+  --text-color: #{$text-color};
+  --input-color: #{$input-color};
+  --border-color: #{$border-color};
+  --gray-color: #{$gray-color};
+  --dark-gray-color: #{$dark-gray-color};
+  --shadow: #{$shadow};
+}

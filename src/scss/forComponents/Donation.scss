@@ -1,0 +1,158 @@
+@import '../styles/base/variables';
+
+.donation {
+  background-color: $main-green-color;
+  height: auto;
+  position: relative;
+  margin-top: 60px;
+  padding: 40px 0;
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+
+  &__left {
+    width: 100%;
+    
+    h2 {
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      color: #fff;
+      margin: 0 0 30px 0;
+      text-align: center;
+    }
+
+    .checkboxes {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 25px;
+
+      label {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 500;
+        font-size: 16px;
+        color: #fff;
+        cursor: pointer;
+
+        .checkbox-icon {
+          width: 20px;
+          height: 20px;
+          border-radius: 3px;
+          background-color: #fff;
+        }
+      }
+    }
+
+    .donation__input {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      input {
+        background-color: transparent;
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #fff;
+        border-radius: 10px;
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 400;
+        font-size: 16px;
+        color: #fff;
+        outline: none;
+
+        &::placeholder {
+          color: rgba(#fff, 0.7);
+        }
+
+        &:focus {
+          border-color: #fff;
+        }
+
+        &[type="number"]::-webkit-outer-spin-button,
+        &[type="number"]::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        &[type="number"] {
+          -moz-appearance: textfield;
+          appearance: none; 
+        }
+      }
+    }
+  }
+
+  &__right {
+    display: none;
+
+    .donation__image {
+      display: none;
+    }
+  }
+
+  @media (min-width: 768px) {
+    height: 360px;
+    margin-top: 112px;
+    padding: 0;
+
+    .container {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    &__left {
+      width: auto;
+      
+      h2 {
+        font-size: 36px;
+        margin: 71px 0 50px 0;
+        text-align: left;
+      }
+
+      .checkboxes {
+        flex-direction: row;
+        gap: 40px;
+        margin-bottom: 32px;
+
+        label {
+          font-size: 18px;
+
+          .checkbox-icon {
+            width: 25px;
+            height: 25px;
+          }
+        }
+      }
+
+      .donation__input {
+        flex-direction: row;
+        gap: 20px;
+
+        input {
+          width: 200px;
+          padding: 15px;
+          font-size: 18px;
+        }
+      }
+    }
+
+    &__right {
+      display: block;
+      
+      .donation__image {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        right: 25%;
+      }
+    }
+  }
+}

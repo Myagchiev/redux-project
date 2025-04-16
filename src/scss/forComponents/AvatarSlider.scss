@@ -1,0 +1,71 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+.avatar-slider {
+
+  h2 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: $text-color;
+  }
+
+  &__wrapper {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 10px 30px 2px #0000000D;
+    width: 650px;
+    height: 247px;
+    box-sizing: border-box;
+    padding: 20px 30px;
+
+    .second_wrapper {
+      display: flex;
+    }
+  }
+
+  &__grid {
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    margin: 0 25px;
+  }
+
+  &__item {
+    text-align: center;
+
+    .avatar-slider__image {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin: 30px 0px 10px;
+  }
+
+    p {
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: $gray-color;
+    }
+  }
+
+  &__arrow {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: $main-green-color;
+    cursor: pointer;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    svg {
+      display: block;
+    }
+  }
+}

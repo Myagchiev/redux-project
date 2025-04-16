@@ -1,0 +1,129 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+
+.cart-page {
+  margin-bottom: 40px;
+
+  .empty {
+    text-align: center;
+    
+    h2 {
+      margin:  0 0 50px 130px;
+      color: rgb(237, 20, 20);
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 600;
+      font-size: 36px;
+    }
+  }
+
+  
+  .cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .cart-item {
+    display: flex;
+    align-items: center;
+    border: 1px solid $border-color;
+    border-radius: 10px;
+    padding: 20px;
+    gap: 20px;
+
+    &__image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    &__details {
+      flex: 1;
+
+      h3 {
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 600;
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      p {
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 500;
+        font-size: 18px;
+        color: $gray-color;
+        margin-bottom: 10px;
+      }
+
+      .cart-item__quantity {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        button {
+          width: 30px;
+          height: 30px;
+          border: 1px solid $main-green-color;
+          border-radius: 5px;
+          background: none;
+          font-size: 20px;
+          color: $main-green-color;
+          cursor: pointer;
+
+          &:hover:not(:disabled) {
+            background-color: $main-green-color;
+            color: #fff;
+          }
+
+          &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+        }
+
+        span {
+          font-family: 'Gilroy', sans-serif;
+          font-weight: 500;
+          font-size: 20px;
+        }
+      }
+    }
+
+    &__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 20px;
+
+      p {
+        font-family: 'Gilroy', sans-serif;
+        font-weight: 600;
+        font-size: 22px;
+      }
+
+      .cart-item__remove {
+        cursor: pointer;
+        width: 24px;
+        height: 24px;
+
+        &:hover {
+          color: $main-green-color;
+        }
+      }
+    }
+  }
+
+  .cart-summary {
+    margin-top: 40px;
+    text-align: right;
+
+    h3 {
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+  }
+}

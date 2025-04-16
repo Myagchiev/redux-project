@@ -1,0 +1,48 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+
+.card-template {
+  padding: 10px 0;
+
+  &__wrapper {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+  }
+
+  &__image {
+    flex: 0 0 558px;
+    img {
+        border-radius: 25px;
+    }
+  }
+
+  &__content {
+    flex: 1;
+    h2 {
+      font-family: 'Gilroy', sans-serif;
+      font-weight: 700;
+      font-size: 36px;
+      line-height: 120%;
+      color: $text-color;
+      width: 50%;
+      margin-bottom: 15px;
+    }
+  }
+
+  &__description {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 140%;
+    color: $gray-color;
+    width: 77%;
+  }
+
+  &__extra {
+    margin-top: 65px;
+    display: flex;
+    flex-direction: column;
+  }
+}

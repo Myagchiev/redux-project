@@ -1,0 +1,53 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+
+.payment-delivery-page {
+  margin-bottom: 100px;
+
+  h2 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    margin-bottom: 60px;
+  }
+
+  h3 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 20px 0 10px;
+  }
+
+  h4 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    margin: 15px 0 10px;
+    line-height: 140%;
+  }
+
+  p {
+    font-family: 'Gilroy', sans-serif;
+    font-size: 16px;
+    color: $text-color;
+    margin-bottom: 10px;
+    line-height: 140%;
+    font-weight: 500;
+  }
+
+  ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-bottom: 10px;
+
+    li {
+      font-family: 'Gilroy', sans-serif;
+      font-size: 16px;
+      color: $text-color;
+      margin-bottom: 10px;
+      line-height: 140%;
+      font-weight: 500;
+    }
+  }
+}

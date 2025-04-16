@@ -1,0 +1,36 @@
+@import '../styles/base/variables';
+@import '../styles/base/mixins';
+@import '../styles/base/animations';
+
+.custom-button {
+  // Базовые стили, которые нельзя переопределить через пропсы
+  border: 1px solid $border-color; // Граница по умолчанию
+  border-radius: 10px; // Радиус по умолчанию
+  font-family: 'Gilroy', sans-serif; // Шрифт
+  font-weight: 600; // Вес шрифта
+  font-size: 18px; // Размер шрифта
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px; // Расстояние между элементами внутри (если будет иконка)
+  outline: none;
+  min-width: 161px; // Минимальная ширина по умолчанию
+  min-height: 45px;
+
+  // Эффект при наведении
+  &:hover {
+    background-color: darken($main-green-color, 10%);
+  }
+
+  // Убираем стандартные стили кнопки
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: $gray-color;
+  }
+}

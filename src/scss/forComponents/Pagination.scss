@@ -1,0 +1,52 @@
+@import '../styles/base/variables';
+@import '../styles/base/animations';
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: $spacing-xs;
+  margin: $spacing-xl 0 $spacing-xl 0;
+
+  &__arrow {
+    border: none;
+    background: none;
+    font-size: 20px;
+    color: $text-color;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover:not(:disabled) {
+      color: $main-green-color;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    svg {
+      display: block;
+    }
+  }
+
+  &__number {
+    border: none;
+    background: none;
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: $gray-color;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &.active {
+      color: $main-green-color;
+      font-size: 20px;
+    }
+
+    &:hover:not(.active) {
+      color: $main-green-color;
+    }
+  }
+}
