@@ -110,7 +110,7 @@ const Navbar = () => {
             <button
               className="mobile-menu-toggle"
               onClick={toggleMobileMenu}
-              aria-label="Открыть меню"
+              aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
             >
               {isMobileMenuOpen ? <IoIosClose /> : <CiMenuBurger />}
             </button>
