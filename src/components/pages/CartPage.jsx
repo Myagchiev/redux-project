@@ -10,6 +10,7 @@ import Button from '../Button';
 import CheckoutModal from '../CheckoutModal';
 import { FiTrash2 } from 'react-icons/fi';
 import empty from '../../assets/empty.png';
+import emptyPhone from '../../assets/emptyPhone.png';
 import '../../scss/forComponents/CartPage.scss';
 import { useState } from 'react';
 
@@ -56,7 +57,10 @@ const CartPage = ({ onOrderUpdate }) => {
         <Breadcrumbs />
         <div className="empty container">
           <h2>Ваша корзина пуста...</h2>
-          <img src={empty} alt="пусто" />
+          <picture>
+            <img src={emptyPhone} alt="пусто" className="empty__image" />
+            <img src={empty} alt="пусто" className="emptyDesk__image" />
+          </picture>
         </div>
       </section>
     );
