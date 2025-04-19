@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './components/pages/Home';
 import CatalogPage from './components/pages/CatalogPage';
+import CatalogListPage from './components/pages/CatalogListPage';
 import ProductPage from './components/pages/ProductPage';
 import CartPage from './components/pages/CartPage';
 import PaymentDeliveryPage from './components/pages/PaymentDeliveryPage';
@@ -27,6 +28,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/catalog" element={<CatalogListPage />} />
         <Route path="/catalog/:category" element={<CatalogPage />} />
         <Route path="/catalog/grains" element={<GrainsPage />} />
         <Route path="/catalog/:category/:id" element={<ProductPage />} />

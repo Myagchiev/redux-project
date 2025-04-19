@@ -8,17 +8,21 @@ import '../../scss/forComponents/CatalogPages.scss';
 
 const CatalogPage = () => {
   const { category } = useParams();
-  const baseProduct = products[category]?.[0];
-
   const [currentPage, setCurrentPage] = useState(1);
 
   const categoryProducts = useMemo(() => {
-    if (!baseProduct) return [];
-    return Array.from({ length: 24 }, (_, index) => ({
-      ...baseProduct,
-      id: baseProduct.id, // Используем оригинальный id
-    }));
-  }, [baseProduct]);
+    if (!products[category]) return [];
+    const originalProducts = products[category];
+    const result = [];
+    for (let i = 0; result.length < 24 && originalProducts.length > 0; i++) {
+      const product = originalProducts[i % originalProducts.length];
+      result.push({
+        ...product,
+        id: `${product.id}-${result.length}`, // Уникальный ID для дубликатов
+      });
+    }
+    return result;
+  }, [category]);
 
   const itemsPerPage = 8;
   const totalPages = Math.ceil(categoryProducts.length / itemsPerPage);
@@ -29,7 +33,7 @@ const CatalogPage = () => {
     return categoryProducts.slice(startIndex, endIndex);
   }, [currentPage, categoryProducts]);
 
-  if (!products[category] || !baseProduct) {
+  if (!products[category] || categoryProducts.length === 0) {
     return (
       <section className="catalog-page">
         <Breadcrumbs />
@@ -53,61 +57,79 @@ const CatalogPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  const weightCategories = ['gotovye-miksy', 'grains', 'gotovye-komplekty'];
+  const weightCategories = [
+    'gotovye-miksy',
+    'grains',
+    'gotovye-komplekty',
+    'otdelnye-vidy-kormov',
+    'kormushki',
+    'aksessuary-i-drugoe',
+  ];
   const showWeights = weightCategories.includes(category);
 
-  const cartCategories = ['gotovye-miksy', 'grains', 'gotovye-komplekty'];
+  const cartCategories = [
+    'gotovye-miksy',
+    'grains',
+    'gotovye-komplekty',
+    'otdelnye-vidy-kormov',
+    'kormushki',
+    'aksessuary-i-drugoe',
+  ];
   const showCart = cartCategories.includes(category);
 
   return (
     <section className="catalog-page">
       <Breadcrumbs />
       <div className="container">
-        <div className="products-grid">
+        <div className="products-grid" key={`page-${currentPage}`}>
           {displayProducts.map((product, index) => (
             <ProductCard
-              key={`${category}-${product.id}-${index}`}
+              key={`${category}-${product.id}`}
               name={product.name}
               price={product.basePrice}
               image={product.image}
               description={product.description || 'Описание товара'}
               showWeights={showWeights}
               showCart={showCart}
-              id={product.id}
+              id={product.id.split('-')[0]} // Извлекаем оригинальный ID
               category={category}
               isBird={false}
               style={{ animationDelay: `${index * 0.1}s` }}
             />
           ))}
         </div>
-        <div className="pagination">
-          <button
-            className="pagination__arrow"
-            onClick={handlePrev}
-            disabled={currentPage === 1}
-            aria-label="Предыдущая страница"
-          >
-            <IoIosArrowBack />
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => (
+        {totalPages > 1 && (
+          <div className="pagination">
             <button
-              key={index + 1}
-              className={`pagination__number ${currentPage === index + 1 ? 'active' : ''}`}
-              onClick={() => handlePageChange(index + 1)}
-              aria-label={`Страница ${index + 1}`}
+              className="pagination__arrow"
+              onClick={handlePrev}
+              disabled={currentPage === 1}
+              aria-label="Предыдущая страница"
             >
-              {index + 1}
+              <IoIosArrowBack />
             </button>
-          ))}
-          <button
-            className="pagination__arrow"
-            onClick={handleNext}
-            disabled={currentPage === totalPages}
-            aria-label="Следующая страница"
-          >
-            <IoIosArrowForward />
-          </button>
-        </div>
+            {Array.from({ length: totalPages }, (_, index) => (
+              <button
+                key={index + 1}
+                className={`pagination__number ${
+                  currentPage === index + 1 ? 'active' : ''
+                }`}
+                onClick={() => handlePageChange(index + 1)}
+                aria-label={`Страница ${index + 1}`}
+              >
+                {index + 1}
+              </button>
+            ))}
+            <button
+              className="pagination__arrow"
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              aria-label="Следующая страница"
+            >
+              <IoIosArrowForward />
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

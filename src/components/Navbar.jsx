@@ -58,10 +58,13 @@ const Navbar = () => {
     const results = [];
     Object.keys(products).forEach((category) => {
       if (category === 'bird') return;
+
+      const categoryData = categories.find(
+        (cat) => cat.path === `/catalog/${category}`
+      );
+      const categoryName = categoryData ? categoryData.name : category;
+
       products[category].forEach((product) => {
-        const categoryName =
-          categories.find((cat) => cat.path === `/catalog/${category}`)?.name ||
-          category;
         if (
           product.name.toLowerCase().includes(query.toLowerCase()) ||
           (product.description &&
@@ -69,7 +72,7 @@ const Navbar = () => {
           categoryName.toLowerCase().includes(query.toLowerCase())
         ) {
           results.push({
-            id: `${category}-${product.id}`,
+            id: product.id,
             name: product.name,
             category,
             image: product.image,
@@ -84,9 +87,7 @@ const Navbar = () => {
     e.preventDefault();
     if (searchResults.length > 0) {
       const firstResult = searchResults[0];
-      navigate(
-        `/catalog/${firstResult.category}/${firstResult.id.split('-')[1]}`
-      );
+      navigate(`/catalog/${firstResult.category}/${firstResult.id}`);
       setSearchQuery('');
       setSearchResults([]);
       setIsMobileMenuOpen(false);
@@ -194,9 +195,9 @@ const Navbar = () => {
               {searchResults.length > 0 && (
                 <ul className="search-results">
                   {searchResults.map((result) => (
-                    <li key={result.id}>
+                    <li key={`${result.category}-${result.id}`}>
                       <Link
-                        to={`/catalog/${result.category}/${result.id.split('-')[1]}`}
+                        to={`/catalog/${result.category}/${result.id}`}
                         onClick={() => {
                           setSearchQuery('');
                           setSearchResults([]);
@@ -230,9 +231,9 @@ const Navbar = () => {
             {searchResults.length > 0 && (
               <ul className="search-results">
                 {searchResults.map((result) => (
-                  <li key={result.id}>
+                  <li key={`${result.category}-${result.id}`}>
                     <Link
-                      to={`/catalog/${result.category}/${result.id.split('-')[1]}`}
+                      to={`/catalog/${result.category}/${result.id}`}
                       onClick={() => {
                         setSearchQuery('');
                         setSearchResults([]);

@@ -1,0 +1,83 @@
+// scss/forComponents/CatalogListPage.scss
+@import '../styles/base/variables';
+@import '../styles/base/animations';
+
+.catalog-list-page {
+  min-height: calc(100vh - 470px);
+  padding: $spacing-md 0;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 600;
+    font-size: 36px;
+    color: $text-color;
+    margin-bottom: $spacing-md;
+
+    @media (max-width: 768px) {
+      font-size: 28px;
+      margin-bottom: $spacing-sm;
+      margin-left: $spacing-xs;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 24px;
+      margin-bottom: $spacing-sm;
+      margin-left: $spacing-xs;
+    }
+  }
+
+  .categories-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: $spacing-sm;
+    animation: fadeIn 0.5s ease-in-out;
+
+    @media (max-width: 768px) {
+      grid-template-columns: repeat(2, 1fr);
+      gap: $spacing-xs;
+    }
+
+    @media (max-width: 480px) {
+      grid-template-columns: 1fr;
+      gap: $spacing-xs;
+    }
+  }
+
+  .category-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: $spacing-md;
+    min-height: 100px; 
+    background: $main-color;
+    color: $text-color;
+    font-family: 'Gilroy', sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    text-align: center;
+    border-radius: 8px;
+    border: 1px solid $border-color;
+    box-shadow: $shadow;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+
+    &:hover {
+      background: $main-green-color;
+      color: $white-color;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 768px) {
+      font-size: 18px;
+      padding: $spacing-sm;
+      min-height: 80px;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 16px;
+      padding: $spacing-sm;
+      min-height: 70px;
+    }
+  }
+}

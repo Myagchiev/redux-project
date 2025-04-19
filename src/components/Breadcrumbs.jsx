@@ -11,24 +11,30 @@ const Breadcrumbs = ({ productName }) => {
   const crumbs = [
     { path: '/', name: 'Главная', isLast: pathnames.length === 0 },
   ];
-  let path = '';
+  let currentPath = '';
 
   pathnames.forEach((value, index) => {
-    path += `/${value}`;
+    currentPath += `/${value}`;
     const isLast = index === pathnames.length - 1;
     let displayName = value;
 
     if (value === 'catalog' && index === 0) {
       displayName = 'Каталог';
-      path = '/';
+      currentPath = '/catalog';
     } else if (index === 1 && pathnames[0] === 'catalog') {
       const category = categories.find(
         (cat) => cat.path === `/catalog/${value}`
       );
       displayName = category ? category.name : value;
-      if (value === 'grains') displayName = 'Зёрна';
-      if (value === 'gotovye-miksy') displayName = 'Готовые миксы';
-      if (value === 'kormushki') displayName = 'Кормушки';
+      const categoryNames = {
+        grains: 'Зёрна',
+        'gotovye-miksy': 'Готовые миксы',
+        kormushki: 'Кормушки',
+        'gotovye-komplekty': 'Готовые комплекты',
+        'otdelnye-vidy-kormov': 'Отдельные виды кормов',
+        'aksessuary-i-drugoe': 'Аксессуары и другое',
+      };
+      displayName = categoryNames[value] || displayName;
     } else if (index === 2 && pathnames[0] === 'catalog' && productName) {
       displayName = productName;
     } else if (value === 'birds') {
@@ -45,14 +51,16 @@ const Breadcrumbs = ({ productName }) => {
       displayName = 'Корзина';
     }
 
-    crumbs.push({ path, name: displayName, isLast });
+    crumbs.push({ path: currentPath, name: displayName, isLast });
   });
 
-  const uniqueCrumbs = crumbs.filter(
-    (crumb, index, self) =>
-      index ===
-      self.findIndex((c) => c.path === crumb.path && c.name === crumb.name)
-  );
+  const uniqueCrumbs = crumbs.reduce((acc, crumb) => {
+    const exists = acc.find(
+      (c) => c.path === crumb.path && c.name === crumb.name
+    );
+    if (!exists) acc.push(crumb);
+    return acc;
+  }, []);
 
   return (
     <div className="container">

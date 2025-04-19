@@ -87,7 +87,6 @@ const CartPage = ({ onOrderUpdate }) => {
                     onClick={() =>
                       handleQuantityChange(item.id, item.weight, -1)
                     }
-                    disabled={item.quantity <= 1}
                     aria-label="Уменьшить количество"
                   >
                     −
