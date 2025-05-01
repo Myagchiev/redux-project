@@ -1,14 +1,39 @@
+import * as React from 'react';
 import { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../redux/cartSlice';
-import { FiShoppingCart } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
-import Button from './Button';
-import Notification from './Notification';
-import { weights, calculateTotalPrice } from '../utils/weightUtils';
-import '../scss/forComponents/ProductCard.scss';
+import { FiShoppingCart } from 'react-icons/fi';
+import { addToCart } from '@/redux/cartSlice';
+import Button from '@/components/Button';
+import Notification from '@/components/Notification';
+import { weights, calculateTotalPrice } from '@/utils/weightUtils';
+import '@/scss/forComponents/ProductCard.scss';
 
-const ProductCard = ({
+// Тип для пропсов
+interface ProductCardProps {
+  name: string;
+  price: number;
+  showPrice?: boolean;
+  image: string;
+  description: string;
+  showWeights?: boolean;
+  showCart?: boolean;
+  id: number | string;
+  category: string;
+  isBird?: boolean;
+}
+
+// Тип для элемента корзины (совместим с cartSlice.ts)
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  image: string;
+  weight: number;
+  quantity: number;
+}
+
+const ProductCard: React.FC<ProductCardProps> = ({
   name,
   price: basePrice,
   showPrice = true,
@@ -21,15 +46,15 @@ const ProductCard = ({
   isBird = false,
 }) => {
   const dispatch = useDispatch();
-  const [selectedWeight, setSelectedWeight] = useState(weights[0]);
-  const [showNotification, setShowNotification] = useState(false);
+  const [selectedWeight, setSelectedWeight] = useState<number>(weights[0]);
+  const [showNotification, setShowNotification] = useState<boolean>(false);
 
-  const totalPrice = useMemo(
+  const totalPrice = useMemo<number | null>(
     () => (basePrice ? calculateTotalPrice(basePrice, selectedWeight) : null),
     [basePrice, selectedWeight]
   );
 
-  const handleAddToCart = (e) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     if (isBird || !id || !category || !totalPrice || !selectedWeight) {
       return;
@@ -50,7 +75,7 @@ const ProductCard = ({
     setTimeout(() => setShowNotification(false), 3000);
   };
 
-  const handleWeightChange = (weight) => {
+  const handleWeightChange = (weight: number) => {
     setSelectedWeight(weight);
   };
 

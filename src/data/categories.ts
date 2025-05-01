@@ -1,4 +1,9 @@
-export const categories = [
+export interface Category {
+  name: string;
+  path: string;
+}
+
+export const categories: Category[] = [
   { name: 'Готовые миксы', path: '/catalog/gotovye-miksy' },
   { name: 'Отдельные виды кормов', path: '/catalog/otdelnye-vidy-kormov' },
   { name: 'Кормушки', path: '/catalog/kormushki' },

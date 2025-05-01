@@ -6,9 +6,87 @@ import AvatarSlider from '../AvatarSlider';
 import { products } from '../../data/products';
 import '../../scss/forComponents/BirdDetailPage.scss';
 
-const BirdDetailPage = () => {
-  const { id } = useParams();
-  const cleanId = id.toString();
+// Типизация параметров маршрута
+interface RouteParams {
+  id: string;
+}
+
+// Тип для объекта птицы
+interface Bird {
+  id: number;
+  name: string;
+  image: string;
+  imageBig?: string;
+  description: string;
+  pageDescription?: string;
+  relatedMixes?: Array<{ id: number; name: string; image: string }>;
+}
+
+// Тип для объекта зерна
+interface Grain {
+  id: number;
+  name: string;
+  image: string;
+  relatedBirds?: Array<{ id: number }>;
+  basePrice?: number;
+  description?: string;
+}
+
+// Тип для объекта рекомендаций
+interface Recommendation {
+  id: number;
+  name: string;
+  image: string;
+  description?: string;
+  basePrice?: number;
+  category: string;
+}
+
+// Тип для данных products
+interface ProductsData {
+  bird: Bird[];
+  grains: Grain[];
+  [key: string]: Array<Bird | Grain>;
+}
+
+// Типизация пропсов компонентов
+interface BreadcrumbsProps {
+  productName?: string;
+}
+
+interface CardTemplateProps {
+  image: string;
+  alt: string;
+  title: string;
+  description: string;
+}
+
+interface ProductCardProps {
+  key: string;
+  name: string;
+  image: string;
+  description?: string;
+  showPrice: boolean;
+  showWeights: boolean;
+  showCart: boolean;
+  id: number;
+  category: string;
+  isBird: boolean;
+  price?: number;
+}
+
+interface AvatarSliderProps {
+  items: Array<{ id: number; name: string; image: string }>;
+  title: string;
+  itemsPerPage: number;
+}
+
+// Типизация данных products
+declare const products: ProductsData;
+
+const BirdDetailPage: React.FC = () => {
+  const { id } = useParams<RouteParams>();
+  const cleanId = id?.toString() || '';
   const bird = products.bird.find((item) => item.id.toString() === cleanId);
 
   if (!bird) {
@@ -22,7 +100,7 @@ const BirdDetailPage = () => {
     );
   }
 
-  const getRecommendations = (type) => {
+  const getRecommendations = (type: string): Recommendation[] => {
     const source = type === 'bird' ? products.bird : products[type];
     return source
       .filter((item) => item.id.toString() !== cleanId)
@@ -35,18 +113,19 @@ const BirdDetailPage = () => {
       }));
   };
 
-  const viewedItems = getRecommendations('bird');
-  const boughtItems = getRecommendations('grains');
+  const viewedItems: Recommendation[] = getRecommendations('bird');
+  const boughtItems: Recommendation[] = getRecommendations('grains');
 
-  const relatedGrains = products.grains
-    .filter((grain) =>
-      grain.relatedBirds?.some((b) => b.id.toString() === cleanId)
-    )
-    .map((grain) => ({
-      id: grain.id,
-      name: grain.name,
-      image: grain.image,
-    }));
+  const relatedGrains: Array<{ id: number; name: string; image: string }> =
+    products.grains
+      .filter((grain) =>
+        grain.relatedBirds?.some((b) => b.id.toString() === cleanId)
+      )
+      .map((grain) => ({
+        id: grain.id,
+        name: grain.name,
+        image: grain.image,
+      }));
 
   return (
     <section className="bird-detail-page">

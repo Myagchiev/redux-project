@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+      "composite": true,
+      "skipLibCheck": true,
+      "module": "ESNext",
+      "moduleResolution": "Node",
+      "allowSyntheticDefaultImports": true,
+      "types": ["node", "@types/react", "@types/react-dom"],
+      "declaration": true,
+      "declarationMap": true,
+      "outDir": "./dist"
+    },
+    "include": ["vite.config.ts"]
+  }

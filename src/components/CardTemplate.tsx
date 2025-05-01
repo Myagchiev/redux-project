@@ -1,13 +1,23 @@
+import * as React from 'react';
 import '../scss/forComponents/CardTemplate.scss';
 
-const CardTemplate = ({
+// Интерфейс для пропсов
+interface CardTemplateProps {
+  image: string; // URL изображения
+  alt?: string; // Альтернативный текст (опционально)
+  title: string; // Заголовок
+  description?: string | string[] | null; // Описание: строка, массив строк или null
+  children?: React.ReactNode; // Дополнительный контент
+}
+
+const CardTemplate: React.FC<CardTemplateProps> = ({
   image,
   alt = 'Изображение',
   title,
   description,
   children,
 }) => {
-  const descriptionParts = Array.isArray(description)
+  const descriptionParts: string[] = Array.isArray(description)
     ? description
     : typeof description === 'string'
       ? description.split('<br>').filter((part) => part.trim() !== '')

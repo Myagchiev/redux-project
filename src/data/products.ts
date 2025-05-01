@@ -45,7 +45,75 @@ import forBird1 from '../assets/forBirds2.png';
 import forBird2 from '../assets/forBirds3.png';
 import forBird3 from '../assets/forBirds4.png';
 
-export const products = {
+interface RelatedBird {
+  id: number;
+  name: string;
+  image: string;
+}
+
+interface RelatedGrain {
+  id: number;
+  name: string;
+  image: string;
+}
+
+interface RelatedMix {
+  id: number;
+  name: string;
+  image: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  basePrice: number;
+  description: string;
+  pageDescription: string[];
+  image: string;
+  imageBig: string;
+  relatedBirds?: RelatedBird[];
+  grains?: RelatedGrain[];
+  materials?: string[];
+  recommendedBirds?: RelatedBird[];
+  includes?: string[];
+  targetBirds?: RelatedBird[];
+  suitableFor?: RelatedBird[];
+}
+
+interface Bird {
+  id: number;
+  name: string;
+  description: string;
+  pageDescription: string[];
+  image: string;
+  imageBig: string;
+  relatedGrains?: RelatedGrain[];
+  relatedMixes?: RelatedMix[];
+}
+
+interface Grain {
+  id: number;
+  name: string;
+  basePrice: number;
+  description: string;
+  pageDescription: string[];
+  image: string;
+  imageBig: string;
+  relatedBirds: RelatedBird[];
+  relatedMixes: RelatedMix[];
+}
+
+interface Products {
+  'gotovye-miksy': Product[];
+  'otdelnye-vidy-kormov': Product[];
+  kormushki: Product[];
+  'gotovye-komplekty': Product[];
+  'aksessuary-i-drugoe': Product[];
+  bird: Bird[];
+  grains: Grain[];
+}
+
+export const products: Products = {
   'gotovye-miksy': [
     {
       id: 1,

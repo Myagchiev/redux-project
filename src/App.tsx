@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './components/pages/Home';
@@ -14,12 +15,18 @@ import LoginPage from './components/pages/LoginPage';
 import AboutPage from './components/pages/AboutPage';
 import GrainsPage from './components/pages/GrainsPage';
 import './scss/styles/app.scss';
-import { useState } from 'react';
 
-function App() {
-  const [orders, setOrders] = useState([]);
+interface Order {
+  id: number;
+  items: { id: number; weight: number; quantity: number; price: number; name: string; image?: string }[];
+  total: number;
+  date: string;
+}
 
-  const handleOrderUpdate = (newOrder) => {
+const App: React.FC = () => {
+  const [orders, setOrders] = useState<Order[]>([]);
+
+  const handleOrderUpdate = (newOrder: Order) => {
     setOrders((prevOrders) => [...prevOrders, newOrder]);
   };
 

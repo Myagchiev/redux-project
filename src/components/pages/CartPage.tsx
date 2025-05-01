@@ -1,30 +1,42 @@
+import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  removeFromCart,
-  updateQuantity,
-  clearCart,
-} from '../../redux/cartSlice';
-import Breadcrumbs from '../Breadcrumbs';
-import Button from '../Button';
-import CheckoutModal from '../CheckoutModal';
+import { removeFromCart, updateQuantity, clearCart } from '@/redux/cartSlice';
+import { RootState } from '@/redux/store';
+import Breadcrumbs from '@/components/Breadcrumbs';
+import Button from '@/components/Button';
+import CheckoutModal from '@/components/CheckoutModal';
 import { FiTrash2 } from 'react-icons/fi';
-import empty from '../../assets/empty.png';
-import emptyPhone from '../../assets/emptyPhone.png';
-import '../../scss/forComponents/CartPage.scss';
-import { useState } from 'react';
+import empty from '@/assets/empty.png';
+import emptyPhone from '@/assets/emptyPhone.png';
+import '@/scss/forComponents/CartPage.scss';
 
-const CartPage = ({ onOrderUpdate }) => {
+// Тип для пропсов
+interface CartPageProps {
+  onOrderUpdate: () => void; // Предполагаю, что это функция без аргументов
+}
+
+// Тип для элемента корзины (должен совпадать с CartItem в cartSlice.ts)
+interface CartItem {
+  id: number;
+  weight: number;
+  quantity: number;
+  price: number;
+  name: string;
+  image?: string;
+}
+
+const CartPage: React.FC<CartPageProps> = ({ onOrderUpdate }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cart = useSelector((state) => state.cart);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const cart = useSelector((state: RootState) => state.cart);
+  const [isCheckoutOpen, setIsCheckoutOpen] = React.useState(false);
 
-  const handleRemove = (id, weight) => {
+  const handleRemove = (id: number, weight: number) => {
     dispatch(removeFromCart({ id, weight }));
   };
 
-  const handleQuantityChange = (id, weight, delta) => {
+  const handleQuantityChange = (id: number, weight: number, delta: number) => {
     dispatch(updateQuantity({ id, weight, delta }));
   };
 
@@ -47,7 +59,7 @@ const CartPage = ({ onOrderUpdate }) => {
   };
 
   const totalSum = cart.items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item: CartItem) => sum + item.price * item.quantity,
     0
   );
 
@@ -71,7 +83,7 @@ const CartPage = ({ onOrderUpdate }) => {
       <Breadcrumbs />
       <div className="container">
         <div className="cart-items">
-          {cart.items.map((item) => (
+          {cart.items.map((item: CartItem) => (
             <div key={`${item.id}-${item.weight}`} className="cart-item">
               <img
                 src={item.image}
