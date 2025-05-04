@@ -81,7 +81,7 @@ const CatalogPage: React.FC = () => {
         <div className="products-grid" key={`page-${currentPage}`}>
           {displayProducts.map((product: Product, index: number) => (
             <ProductCard
-              key={`${category}-${product.id}`}
+            key={`${category}-${product.id}-${index}`}
               name={product.name}
               price={product.basePrice}
               image={product.image}

@@ -170,7 +170,7 @@ const ProductPage: React.FC = () => {
         .filter((bird) => product.relatedBirds?.some((b) => b.id === bird.id))
         .map((bird) => ({ id: bird.id, name: bird.name, image: bird.image }));
 
-      const relatedMixes = product.relatedMixes?.slice(0, 4) || [];
+      const relatedMixes = product.relatedMixes || [];
 
       if (relatedBirds.length) {
         sliders.push(

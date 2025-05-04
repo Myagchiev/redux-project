@@ -294,13 +294,6 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 onAccept={(value) => setFormData({ ...formData, phone: value })}
                 aria-invalid={!!errors.phone}
                 aria-describedby={errors.phone ? 'phone-error' : undefined}
-                style={{
-                  width: '100%',
-                  padding: '10px',
-                  border: errors.phone ? '1px solid red' : '1px solid #ccc',
-                  borderRadius: '4px',
-                  fontSize: '16px',
-                }}
               />
               {errors.phone && (
                 <p id="phone-error" className="error">

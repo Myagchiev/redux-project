@@ -6,7 +6,7 @@ import { addToCart } from '@/redux/cartSlice';
 import Button from '@/components/Button';
 import Notification from '@/components/Notification';
 import { weights, calculateTotalPrice } from '@/utils/weightUtils';
-import { ProductCardProps, CartItem, ProductCategory } from '@/types/types';
+import { ProductCardProps, CartItem } from '@/types/types';
 import '@/scss/forComponents/ProductCard.scss';
 
 const ProductCard: React.FC<ProductCardProps> = ({

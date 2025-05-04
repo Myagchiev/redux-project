@@ -17,11 +17,6 @@ interface SearchProduct {
   image: string;
 }
 
-interface Category {
-  path: string;
-  name: string;
-}
-
 interface NavbarState {
   cart: {
     itemsCount: number;
@@ -42,7 +37,6 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Получение количества элементов в корзине из Redux
   const cartItemsCount = useSelector((state: NavbarState) => state.cart?.itemsCount || 0);
 
   useEffect(() => {

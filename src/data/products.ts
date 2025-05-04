@@ -161,7 +161,7 @@ export const products: Products = {
         'Минеральный камень',
         'Зеркальце',
       ],
-      targetBirds: [
+      relatedBirds: [
         { id: 1, name: 'Домовый воробей', image: bird },
         { id: 2, name: 'Синица большая', image: sinica },
         { id: 3, name: 'Голубь сизый', image: golub },
@@ -172,6 +172,14 @@ export const products: Products = {
         { id: 6, name: 'Снегирь', image: snegir },
         { id: 9, name: 'Скворец', image: skvorec },
         { id: 10, name: 'Ласточка', image: lastochka },
+      ],
+      grains: [
+        { id: 1, name: 'Пшеница', image: pshenica },
+        { id: 2, name: 'Просо', image: proso },
+        { id: 3, name: 'Лён', image: len },
+        { id: 6, name: 'Ячмень', image: yachmen },
+        { id: 4, name: 'Кукуруза', image: kukuruza },
+        { id: 5, name: 'Сорго', image: sorgo },
       ],
     },
   ],
