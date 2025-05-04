@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom';
 import { categories } from '../../data/categories';
+import type { Category } from '../../data/categories';
 import '../../scss/forComponents/CatalogListPage.scss';
 
-const CatalogListPage = () => {
+const CatalogListPage: React.FC = () => {
   return (
     <section className="catalog-list-page">
       <div className="container">
         <h2>Каталог</h2>
         <div className="categories-grid">
           {categories
-            .filter((cat) => cat.path.startsWith('/catalog/'))
-            .map((category) => (
+            .filter((cat: Category) => cat.path.startsWith('/catalog/'))
+            .map((category: Category) => (
               <Link
                 key={category.path}
                 to={category.path}

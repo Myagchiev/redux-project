@@ -2,29 +2,26 @@ import { useState, useMemo } from 'react';
 import ProductCard from '../ProductCard';
 import Breadcrumbs from '../Breadcrumbs';
 import Pagination from '../Pagination';
-import { products } from '../../data/products';
+import { Grain, ProductCategory } from '@/types/types';
+import { products } from '@/data/products';
 import '../../scss/forComponents/CatalogPages.scss';
 
-const GrainsPage = () => {
-  const category = 'grains';
+const GrainsPage: React.FC = () => {
+  const category: ProductCategory = 'grains';
 
-  const categoryProducts = useMemo(() => products.grains || [], []);
+  const categoryProducts: Grain[] = useMemo(() => products.grains || [], []);
 
-  const extendedProducts = useMemo(() => {
-    const result = [];
+  const extendedProducts: Grain[] = useMemo(() => {
+    const result: Grain[] = [];
     for (let i = 0; result.length < 24 && categoryProducts.length > 0; i++) {
-      const product = categoryProducts[i % categoryProducts.length];
-      result.push({
-        ...product,
-        id: `${product.id}-${result.length}`,
-      });
+      result.push(categoryProducts[i % categoryProducts.length]);
     }
     return result;
   }, [categoryProducts]);
 
   const itemsPerPage = 8;
   const totalPages = Math.ceil(extendedProducts.length / itemsPerPage);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const displayProducts = useMemo(() => {
     const startIndex = (currentPage - 1) * itemsPerPage;
@@ -32,7 +29,7 @@ const GrainsPage = () => {
     return extendedProducts.slice(startIndex, endIndex);
   }, [currentPage, extendedProducts]);
 
-  if (!extendedProducts.length) {
+  if (!categoryProducts.length) {
     return (
       <section className="catalog-page">
         <Breadcrumbs />
@@ -53,6 +50,7 @@ const GrainsPage = () => {
           {displayProducts.map((product, index) => (
             <ProductCard
               key={`${category}-${product.id}-${index}`}
+              id={product.id.toString()}
               name={product.name}
               price={product.basePrice}
               image={product.image}
@@ -60,7 +58,6 @@ const GrainsPage = () => {
               showWeights={true}
               showCart={true}
               showPrice={true}
-              id={product.id.split('-')[0]}
               category={category}
               isBird={false}
               style={{ animationDelay: `${index * 0.1}s` }}

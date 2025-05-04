@@ -12,6 +12,5 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(cartMiddleware),
 });
 
-// Типы для TypeScript
 export type AppDispatch = typeof store.dispatch;
 export type RootState = AppState;

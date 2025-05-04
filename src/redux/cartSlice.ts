@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction, Middleware } from '@reduxjs/toolkit';
 import { debounce } from 'lodash';
-
-interface CartItem {
-  id: number;
-  weight: number;
-  quantity: number;
-  price: number;
-  name: string;
-  image?: string;
-}
+import { CartItem } from '../types/types'
 
 export interface CartState {
   items: CartItem[];
@@ -35,7 +27,7 @@ const cartSlice = createSlice({
       if (!id || !weight || !price || !name) return;
 
       const existingItem = state.items.find(
-        (item) => item.id === id && item.weight === weight,
+        (item) => item.id === id && item.weight === weight
       );
 
       if (existingItem) {
@@ -46,26 +38,29 @@ const cartSlice = createSlice({
         state.itemsCount += quantity;
       }
     },
-    removeFromCart(state, action: PayloadAction<{ id: number; weight: number }>) {
+    removeFromCart(state, action: PayloadAction<{ id: string; weight: string }>) {
       const { id, weight } = action.payload;
       if (!id || !weight) return;
 
       const itemToRemove = state.items.find(
-        (item) => item.id === id && item.weight === weight,
+        item => item.id === id && item.weight === weight
       );
       if (!itemToRemove) return;
 
       state.itemsCount -= itemToRemove.quantity;
       state.items = state.items.filter(
-        (item) => !(item.id === id && item.weight === weight),
+        (item) => !(item.id === id && item.weight === weight)
       );
     },
-    updateQuantity(state, action: PayloadAction<{ id: number; weight: number; delta: number }>) {
+    updateQuantity(
+      state,
+      action: PayloadAction<{ id: string; weight: string; delta: number }>
+    ) {
       const { id, weight, delta } = action.payload;
       if (!id || !weight || typeof delta !== 'number') return;
 
       const itemToUpdate = state.items.find(
-        (item) => item.id === id && item.weight === weight,
+        item => item.id === id && item.weight === weight
       );
       if (!itemToUpdate) return;
 
@@ -73,7 +68,7 @@ const cartSlice = createSlice({
 
       if (newQuantity <= 0) {
         state.items = state.items.filter(
-          (item) => !(item.id === id && item.weight === weight),
+          (item) => !(item.id === id && item.weight === weight)
         );
         state.itemsCount -= itemToUpdate.quantity;
       } else {
@@ -89,7 +84,8 @@ const cartSlice = createSlice({
   },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } = cartSlice.actions;
+export const { addToCart, removeFromCart, updateQuantity, clearCart } =
+  cartSlice.actions;
 
 const cartActionTypes = new Set<string>([
   addToCart.type,

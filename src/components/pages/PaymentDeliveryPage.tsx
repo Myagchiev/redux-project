@@ -1,7 +1,7 @@
 import Breadcrumbs from '../Breadcrumbs';
 import '../../scss/forComponents/PaymentDeliveryPage.scss';
 
-const PaymentDeliveryPage = () => {
+const PaymentDeliveryPage: React.FC = () => {
   return (
     <section className="payment-delivery-page">
       <Breadcrumbs />

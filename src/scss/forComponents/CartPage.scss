@@ -8,10 +8,6 @@
   @media (max-width: 768px) {
     margin-bottom: 30px;
     padding: 0 10px;
-
-    .emptyDesk__image {
-      display: none;
-    }
   }
 
   .empty {
@@ -30,19 +26,28 @@
       }
     }
 
-    .empty__image {
-      width: 300px;
-      height: auto;
-      display: none;
-      margin: 0 auto;
-      object-fit: contain;
+    .empty-images {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
 
-      @media (max-width: 768px) {
-        width: 150px;
+      .empty__image {
+        display: none;
+      
+        @media (max-width: 768px) {
+          display: block;
+          width: 150px;
+        }
+      }      
+
+      .emptyDesk__image {
         display: block;
-
-        
-      }
+      
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }      
     }
   }
 

@@ -4,89 +4,12 @@ import CardTemplate from '../CardTemplate';
 import ProductCard from '../ProductCard';
 import AvatarSlider from '../AvatarSlider';
 import { products } from '../../data/products';
+import { Products, RelatedItem, ProductCardProps, RouteParams } from '../../types/types';
 import '../../scss/forComponents/BirdDetailPage.scss';
-
-// Типизация параметров маршрута
-interface RouteParams {
-  id: string;
-}
-
-// Тип для объекта птицы
-interface Bird {
-  id: number;
-  name: string;
-  image: string;
-  imageBig?: string;
-  description: string;
-  pageDescription?: string;
-  relatedMixes?: Array<{ id: number; name: string; image: string }>;
-}
-
-// Тип для объекта зерна
-interface Grain {
-  id: number;
-  name: string;
-  image: string;
-  relatedBirds?: Array<{ id: number }>;
-  basePrice?: number;
-  description?: string;
-}
-
-// Тип для объекта рекомендаций
-interface Recommendation {
-  id: number;
-  name: string;
-  image: string;
-  description?: string;
-  basePrice?: number;
-  category: string;
-}
-
-// Тип для данных products
-interface ProductsData {
-  bird: Bird[];
-  grains: Grain[];
-  [key: string]: Array<Bird | Grain>;
-}
-
-// Типизация пропсов компонентов
-interface BreadcrumbsProps {
-  productName?: string;
-}
-
-interface CardTemplateProps {
-  image: string;
-  alt: string;
-  title: string;
-  description: string;
-}
-
-interface ProductCardProps {
-  key: string;
-  name: string;
-  image: string;
-  description?: string;
-  showPrice: boolean;
-  showWeights: boolean;
-  showCart: boolean;
-  id: number;
-  category: string;
-  isBird: boolean;
-  price?: number;
-}
-
-interface AvatarSliderProps {
-  items: Array<{ id: number; name: string; image: string }>;
-  title: string;
-  itemsPerPage: number;
-}
-
-// Типизация данных products
-declare const products: ProductsData;
 
 const BirdDetailPage: React.FC = () => {
   const { id } = useParams<RouteParams>();
-  const cleanId = id?.toString() || '';
+  const cleanId = id || '';
   const bird = products.bird.find((item) => item.id.toString() === cleanId);
 
   if (!bird) {
@@ -100,32 +23,36 @@ const BirdDetailPage: React.FC = () => {
     );
   }
 
-  const getRecommendations = (type: string): Recommendation[] => {
-    const source = type === 'bird' ? products.bird : products[type];
+  const getRecommendations = (type: keyof Products): ProductCardProps[] => {
+    const source = products[type];
     return source
       .filter((item) => item.id.toString() !== cleanId)
       .sort(() => Math.random() - 0.5)
       .slice(0, 4)
       .map((item) => ({
-        ...item,
-        id: item.id,
+        id: item.id.toString(),
+        name: item.name,
+        image: item.image,
+        description: item.description,
+        price: 'basePrice' in item ? item.basePrice : undefined,
+        showPrice: type === 'grains',
+        showWeights: type === 'grains',
+        showCart: type === 'grains',
         category: type,
+        isBird: type === 'bird',
       }));
   };
 
-  const viewedItems: Recommendation[] = getRecommendations('bird');
-  const boughtItems: Recommendation[] = getRecommendations('grains');
+  const viewedItems: ProductCardProps[] = getRecommendations('bird');
+  const boughtItems: ProductCardProps[] = getRecommendations('grains');
 
-  const relatedGrains: Array<{ id: number; name: string; image: string }> =
-    products.grains
-      .filter((grain) =>
-        grain.relatedBirds?.some((b) => b.id.toString() === cleanId)
-      )
-      .map((grain) => ({
-        id: grain.id,
-        name: grain.name,
-        image: grain.image,
-      }));
+  const relatedGrains: RelatedItem[] = products.grains
+    .filter((grain) => grain.relatedBirds?.some((b) => b.id.toString() === cleanId))
+    .map((grain) => ({
+      id: grain.id,
+      name: grain.name,
+      image: grain.image,
+    }));
 
   return (
     <section className="bird-detail-page">
@@ -134,7 +61,7 @@ const BirdDetailPage: React.FC = () => {
         image={bird.imageBig || bird.image}
         alt={bird.name}
         title={bird.name}
-        description={bird.pageDescription || bird.description}
+        description={bird.pageDescription.join(' ') || bird.description}
       />
 
       <div className="avatar-sliders container">
@@ -145,7 +72,7 @@ const BirdDetailPage: React.FC = () => {
             itemsPerPage={4}
           />
         )}
-        {bird.relatedMixes?.length > 0 && (
+        {bird.relatedMixes && bird.relatedMixes.length > 0 && (
           <AvatarSlider
             items={bird.relatedMixes}
             title="Виды миксов, которыми могут питаться данные птицы"
@@ -161,15 +88,7 @@ const BirdDetailPage: React.FC = () => {
             {viewedItems.map((item) => (
               <ProductCard
                 key={`${item.category}-${item.id}`}
-                name={item.name}
-                image={item.image}
-                description={item.description}
-                showPrice={false}
-                showWeights={false}
-                showCart={false}
-                id={item.id}
-                category={item.category}
-                isBird={true}
+                {...item}
               />
             ))}
           </div>
@@ -183,16 +102,7 @@ const BirdDetailPage: React.FC = () => {
             {boughtItems.map((item) => (
               <ProductCard
                 key={`${item.category}-${item.id}`}
-                name={item.name}
-                price={item.basePrice}
-                image={item.image}
-                description={item.description}
-                showWeights={true}
-                showCart={true}
-                showPrice={true}
-                id={item.id}
-                category={item.category}
-                isBird={false}
+                {...item}
               />
             ))}
           </div>

@@ -1,13 +1,11 @@
-import * as React from 'react';
+import { ReactNode } from 'react';
 import '../scss/forComponents/CardTemplate.scss';
-
-// Интерфейс для пропсов
 interface CardTemplateProps {
-  image: string; // URL изображения
-  alt?: string; // Альтернативный текст (опционально)
-  title: string; // Заголовок
-  description?: string | string[] | null; // Описание: строка, массив строк или null
-  children?: React.ReactNode; // Дополнительный контент
+  image: string;
+  alt?: string;
+  title: string;
+  description?: string | string[] | null;
+  children?: ReactNode;
 }
 
 const CardTemplate: React.FC<CardTemplateProps> = ({
@@ -21,7 +19,7 @@ const CardTemplate: React.FC<CardTemplateProps> = ({
     ? description
     : typeof description === 'string'
       ? description.split('<br>').filter((part) => part.trim() !== '')
-      : [description || 'Описание отсутствует'];
+      : ['Описание отсутствует'];
 
   return (
     <section className="card-template">

@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import Home from './components/pages/Home';
@@ -14,14 +14,8 @@ import DonationPage from './components/pages/DonationPage';
 import LoginPage from './components/pages/LoginPage';
 import AboutPage from './components/pages/AboutPage';
 import GrainsPage from './components/pages/GrainsPage';
+import { Order } from './types/types'
 import './scss/styles/app.scss';
-
-interface Order {
-  id: number;
-  items: { id: number; weight: number; quantity: number; price: number; name: string; image?: string }[];
-  total: number;
-  date: string;
-}
 
 const App: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -39,10 +33,7 @@ const App: React.FC = () => {
         <Route path="/catalog/:category" element={<CatalogPage />} />
         <Route path="/catalog/grains" element={<GrainsPage />} />
         <Route path="/catalog/:category/:id" element={<ProductPage />} />
-        <Route
-          path="/cart"
-          element={<CartPage onOrderUpdate={handleOrderUpdate} />}
-        />
+        <Route path="/cart" element={<CartPage onOrderUpdate={handleOrderUpdate} />} />
         <Route path="/payment-delivery" element={<PaymentDeliveryPage />} />
         <Route path="/birds" element={<BirdsPage />} />
         <Route path="/birds/:id" element={<BirdDetailPage />} />
@@ -55,6 +46,6 @@ const App: React.FC = () => {
       <Footer />
     </>
   );
-}
+};
 
 export default App;

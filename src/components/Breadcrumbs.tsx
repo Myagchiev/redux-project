@@ -3,14 +3,25 @@ import { IoIosArrowBack } from 'react-icons/io';
 import '../scss/forComponents/Breadcrumbs.scss';
 import { categories } from '../data/categories';
 
-const Breadcrumbs = ({ productName }) => {
+interface Breadcrumb {
+  path: string;
+  name: string;
+  isLast: boolean;
+}
+
+interface BreadcrumbsProps {
+  productName?: string;
+}
+
+const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ productName }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const pathnames = location.pathname.split('/').filter((x) => x);
 
-  const crumbs = [
+  const crumbs: Breadcrumb[] = [
     { path: '/', name: 'Главная', isLast: pathnames.length === 0 },
   ];
+
   let currentPath = '';
 
   pathnames.forEach((value, index) => {
@@ -26,7 +37,7 @@ const Breadcrumbs = ({ productName }) => {
         (cat) => cat.path === `/catalog/${value}`
       );
       displayName = category ? category.name : value;
-      const categoryNames = {
+      const categoryNames: Record<string, string> = {
         grains: 'Зёрна',
         'gotovye-miksy': 'Готовые миксы',
         kormushki: 'Кормушки',
@@ -54,7 +65,7 @@ const Breadcrumbs = ({ productName }) => {
     crumbs.push({ path: currentPath, name: displayName, isLast });
   });
 
-  const uniqueCrumbs = crumbs.reduce((acc, crumb) => {
+  const uniqueCrumbs = crumbs.reduce((acc: Breadcrumb[], crumb) => {
     const exists = acc.find(
       (c) => c.path === crumb.path && c.name === crumb.name
     );

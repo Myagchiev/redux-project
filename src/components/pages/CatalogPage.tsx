@@ -3,23 +3,20 @@ import { useParams } from 'react-router-dom';
 import ProductCard from '../ProductCard';
 import Breadcrumbs from '../Breadcrumbs';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
-import { products } from '../../data/products';
+import { Product, Products, ProductCategory, RouteParams } from '@/types/types';
+import { products } from '@/data/products';
 import '../../scss/forComponents/CatalogPages.scss';
 
-const CatalogPage = () => {
-  const { category } = useParams();
-  const [currentPage, setCurrentPage] = useState(1);
+const CatalogPage: React.FC = () => {
+  const { category } = useParams<RouteParams>();
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const categoryProducts = useMemo(() => {
-    if (!products[category]) return [];
-    const originalProducts = products[category];
-    const result = [];
+    if (!category || !products[category as keyof Products]) return [];
+    const originalProducts = products[category as keyof Products] as Product[];
+    const result: Product[] = [];
     for (let i = 0; result.length < 24 && originalProducts.length > 0; i++) {
-      const product = originalProducts[i % originalProducts.length];
-      result.push({
-        ...product,
-        id: `${product.id}-${result.length}`, // Уникальный ID для дубликатов
-      });
+      result.push(originalProducts[i % originalProducts.length]);
     }
     return result;
   }, [category]);
@@ -33,7 +30,7 @@ const CatalogPage = () => {
     return categoryProducts.slice(startIndex, endIndex);
   }, [currentPage, categoryProducts]);
 
-  if (!products[category] || categoryProducts.length === 0) {
+  if (!category || !products[category as keyof Products] || categoryProducts.length === 0) {
     return (
       <section className="catalog-page">
         <Breadcrumbs />
@@ -45,7 +42,7 @@ const CatalogPage = () => {
     );
   }
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
 
@@ -57,7 +54,7 @@ const CatalogPage = () => {
     if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
-  const weightCategories = [
+  const weightCategories: ProductCategory[] = [
     'gotovye-miksy',
     'grains',
     'gotovye-komplekty',
@@ -65,9 +62,9 @@ const CatalogPage = () => {
     'kormushki',
     'aksessuary-i-drugoe',
   ];
-  const showWeights = weightCategories.includes(category);
+  const showWeights = weightCategories.includes(category as ProductCategory);
 
-  const cartCategories = [
+  const cartCategories: ProductCategory[] = [
     'gotovye-miksy',
     'grains',
     'gotovye-komplekty',
@@ -75,24 +72,24 @@ const CatalogPage = () => {
     'kormushki',
     'aksessuary-i-drugoe',
   ];
-  const showCart = cartCategories.includes(category);
+  const showCart = cartCategories.includes(category as ProductCategory);
 
   return (
     <section className="catalog-page">
       <Breadcrumbs />
       <div className="container">
         <div className="products-grid" key={`page-${currentPage}`}>
-          {displayProducts.map((product, index) => (
+          {displayProducts.map((product: Product, index: number) => (
             <ProductCard
               key={`${category}-${product.id}`}
               name={product.name}
               price={product.basePrice}
               image={product.image}
-              description={product.description || 'Описание товара'}
+              description={product.description}
               showWeights={showWeights}
               showCart={showCart}
-              id={product.id.split('-')[0]} // Извлекаем оригинальный ID
-              category={category}
+              id={product.id.toString()}
+              category={category as ProductCategory}
               isBird={false}
               style={{ animationDelay: `${index * 0.1}s` }}
             />

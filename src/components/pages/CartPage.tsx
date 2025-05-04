@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { removeFromCart, updateQuantity, clearCart } from '@/redux/cartSlice';
+import { removeFromCart, updateQuantity, clearCart, CartState } from '@/redux/cartSlice';
 import { RootState } from '@/redux/store';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import Button from '@/components/Button';
@@ -9,34 +9,24 @@ import CheckoutModal from '@/components/CheckoutModal';
 import { FiTrash2 } from 'react-icons/fi';
 import empty from '@/assets/empty.png';
 import emptyPhone from '@/assets/emptyPhone.png';
+import { Order, CartItem } from '@/types/types';
 import '@/scss/forComponents/CartPage.scss';
 
-// Тип для пропсов
 interface CartPageProps {
-  onOrderUpdate: () => void; // Предполагаю, что это функция без аргументов
-}
-
-// Тип для элемента корзины (должен совпадать с CartItem в cartSlice.ts)
-interface CartItem {
-  id: number;
-  weight: number;
-  quantity: number;
-  price: number;
-  name: string;
-  image?: string;
+  onOrderUpdate: (newOrder: Order) => void;
 }
 
 const CartPage: React.FC<CartPageProps> = ({ onOrderUpdate }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const cart = useSelector((state: RootState) => state.cart);
+  const cart = useSelector((state: RootState) => state.cart) as CartState;
   const [isCheckoutOpen, setIsCheckoutOpen] = React.useState(false);
 
-  const handleRemove = (id: number, weight: number) => {
+  const handleRemove = (id: string, weight: string) => {
     dispatch(removeFromCart({ id, weight }));
   };
 
-  const handleQuantityChange = (id: number, weight: number, delta: number) => {
+  const handleQuantityChange = (id: string, weight: string, delta: number) => {
     dispatch(updateQuantity({ id, weight, delta }));
   };
 
@@ -53,6 +43,13 @@ const CartPage: React.FC<CartPageProps> = ({ onOrderUpdate }) => {
   };
 
   const handleConfirmCheckout = () => {
+    const newOrder: Order = {
+      id: Date.now().toString(),
+      items: cart.items,
+      total: totalSum,
+      date: new Date().toISOString(),
+    };
+    onOrderUpdate(newOrder);
     dispatch(clearCart());
     setIsCheckoutOpen(false);
     navigate('/payment-delivery');
@@ -69,10 +66,10 @@ const CartPage: React.FC<CartPageProps> = ({ onOrderUpdate }) => {
         <Breadcrumbs />
         <div className="empty container">
           <h2>Ваша корзина пуста...</h2>
-          <picture>
-            <img src={emptyPhone} alt="пусто" className="empty__image" />
-            <img src={empty} alt="пусто" className="emptyDesk__image" />
-          </picture>
+          <div className="empty-images">
+            <img src={emptyPhone} alt="Пустая корзина" className="empty__image" />
+            <img src={empty} alt="Пустая корзина" className="emptyDesk__image" />
+          </div>
         </div>
       </section>
     );
@@ -86,28 +83,25 @@ const CartPage: React.FC<CartPageProps> = ({ onOrderUpdate }) => {
           {cart.items.map((item: CartItem) => (
             <div key={`${item.id}-${item.weight}`} className="cart-item">
               <img
-                src={item.image}
+                src={item.image ?? empty}
                 alt={item.name}
                 className="cart-item__image"
               />
               <div className="cart-item__details">
                 <h3>{item.name}</h3>
-                <p>Вес: {item.weight}</p>
+                <p>Вес: {item.weight} г</p>
                 <p>Цена за единицу: {item.price} ₽</p>
                 <div className="cart-item__quantity">
                   <button
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.weight, -1)
-                    }
+                    onClick={() => handleQuantityChange(item.id, item.weight, -1)}
                     aria-label="Уменьшить количество"
+                    disabled={item.quantity <= 1}
                   >
                     −
                   </button>
                   <span>{item.quantity}</span>
                   <button
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.weight, 1)
-                    }
+                    onClick={() => handleQuantityChange(item.id, item.weight, 1)}
                     aria-label="Увеличить количество"
                   >
                     +
@@ -119,7 +113,7 @@ const CartPage: React.FC<CartPageProps> = ({ onOrderUpdate }) => {
                 <FiTrash2
                   className="cart-item__remove"
                   onClick={() => handleRemove(item.id, item.weight)}
-                  aria-label="Удалить из корзины"
+                  aria-label={`Удалить ${item.name} из корзины`}
                 />
               </div>
             </div>
@@ -131,6 +125,7 @@ const CartPage: React.FC<CartPageProps> = ({ onOrderUpdate }) => {
             text="Оформить заказ"
             backgroundColor="var(--main-green-color)"
             onClick={handleCheckout}
+            disabled={!cart.items.length}
           />
         </div>
       </div>

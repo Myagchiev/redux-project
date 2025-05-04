@@ -1,4 +1,4 @@
-export const weights = ['200 г', '400 г', '800 г', '1 кг'] as const;
+export const weights: string[] = ['200 г', '400 г', '800 г', '1 кг'] as const;
 
 export const weightMultipliers: Record<string, number> = {
   '200 г': 1,

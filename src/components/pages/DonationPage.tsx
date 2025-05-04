@@ -4,7 +4,7 @@ import donat from '../../assets/donation-banner.jpg';
 import Button from '../Button';
 import '../../scss/forComponents/DonationPage.scss';
 
-const DonationPage = () => {
+const DonationPage: React.FC = () => {
   return (
     <section className="donation-page">
       <Breadcrumbs />

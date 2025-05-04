@@ -2,14 +2,14 @@ import '../../scss/forComponents/Donation.scss';
 import IPhone from '../../assets/iPhone.png';
 import Button from '../Button';
 import { BsSquare, BsCheckSquare } from 'react-icons/bs';
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 
-const DonationForm = () => {
-  const [oneTime, setOneTime] = useState(false);
-  const [monthly, setMonthly] = useState(false);
-  const [amount, setAmount] = useState('');
+const DonationForm: React.FC = () => {
+  const [oneTime, setOneTime] = useState<boolean>(false);
+  const [monthly, setMonthly] = useState<boolean>(false);
+  const [amount, setAmount] = useState<string>('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!amount) return;
     alert(

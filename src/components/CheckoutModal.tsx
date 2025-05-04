@@ -1,10 +1,51 @@
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
+import { IMaskInput } from 'react-imask';
 import Button from './Button';
 import '../scss/forComponents/CheckoutModal.scss';
+import { CartItem, Order } from '../types/types';
 
-const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
+interface Cart {
+  items: CartItem[];
+}
+
+interface CheckoutModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  cart: Cart;
+  onConfirm: () => void;
+  onOrderUpdate?: (order: Order) => void;
+}
+
+interface FormData {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  deliveryDate: string;
+  comment: string;
+  paymentMethod: string;
+  agreement: boolean;
+}
+
+interface Errors {
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  deliveryDate: string;
+  paymentMethod: string;
+  agreement: string;
+}
+
+const CheckoutModal: React.FC<CheckoutModalProps> = ({
+  isOpen,
+  onClose,
+  cart,
+  onConfirm,
+  onOrderUpdate,
+}) => {
+  const [step, setStep] = useState<number>(1);
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     phone: '',
     email: '',
@@ -14,7 +55,7 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
     paymentMethod: '',
     agreement: false,
   });
-  const [errors, setErrors] = useState({
+  const [errors, setErrors] = useState<Errors>({
     name: '',
     phone: '',
     email: '',
@@ -29,8 +70,8 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
     0
   );
 
-  const validateStep1 = () => {
-    const newErrors = {
+  const validateStep1 = (): boolean => {
+    const newErrors: Errors = {
       name: '',
       phone: '',
       email: '',
@@ -49,13 +90,12 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
       isValid = false;
     }
 
-    const phoneRegex = /^\+?\d{10,}$/;
+    const cleanedPhone = formData.phone.replace(/\D/g, '');
     if (!formData.phone) {
       newErrors.phone = 'Введите номер телефона';
       isValid = false;
-    } else if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
-      newErrors.phone =
-        'Введите корректный номер телефона (например, +79999999999)';
+    } else if (cleanedPhone.length !== 11) {
+      newErrors.phone = 'Введите корректный номер телефона (например, +7 (999) 999-99-99)';
       isValid = false;
     }
 
@@ -72,8 +112,8 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
     return isValid;
   };
 
-  const validateStep2 = () => {
-    const newErrors = {
+  const validateStep2 = (): boolean => {
+    const newErrors: Errors = {
       name: errors.name,
       phone: errors.phone,
       email: errors.email,
@@ -100,8 +140,7 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       if (selectedDate < today) {
-        newErrors.deliveryDate =
-          'Дата доставки не может быть раньше сегодняшнего дня';
+        newErrors.deliveryDate = 'Дата доставки не может быть раньше сегодняшнего дня';
         isValid = false;
       }
     }
@@ -110,8 +149,8 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
     return isValid;
   };
 
-  const validateStep3 = () => {
-    const newErrors = {
+  const validateStep3 = (): boolean => {
+    const newErrors: Errors = {
       name: errors.name,
       phone: errors.phone,
       email: errors.email,
@@ -136,7 +175,7 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
     return isValid;
   };
 
-  const handleNext = (e) => {
+  const handleNext = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (step === 1 && validateStep1()) {
       setStep(2);
@@ -148,22 +187,20 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
   };
 
   const handleConfirm = () => {
-    const order = {
+    const cleanedPhone = formData.phone.replace(/\D/g, '');
+    const formattedPhone = cleanedPhone.startsWith('7') 
+      ? `+${cleanedPhone}` 
+      : `+7${cleanedPhone}`;
+
+    const order: Order = {
       id: `order-${Date.now()}`,
-      items: cart.items.map((item) => ({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: item.quantity,
-        weight: item.weight,
-        image: item.image,
-      })),
+      items: cart.items,
       total: totalSum,
       date: new Date().toISOString().split('T')[0],
       userEmail: formData.email,
       deliveryDetails: {
         name: formData.name,
-        phone: formData.phone,
+        phone: formattedPhone,
         address: formData.address,
         deliveryDate: formData.deliveryDate,
         comment: formData.comment,
@@ -172,7 +209,7 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
     };
 
     const savedOrders = localStorage.getItem('orders');
-    const orders = savedOrders ? JSON.parse(savedOrders) : [];
+    const orders: Order[] = savedOrders ? JSON.parse(savedOrders) : [];
     orders.push(order);
     localStorage.setItem('orders', JSON.stringify(orders));
 
@@ -210,10 +247,14 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
     onClose();
   };
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     if (!dateString) return '';
     const date = new Date(dateString);
-    const options = { weekday: 'long', day: 'numeric', month: 'long' };
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    };
     return date.toLocaleDateString('ru-RU', options);
   };
 
@@ -222,48 +263,65 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <button className="modal-close" onClick={handleClose}>
+        <button className="modal-close" onClick={handleClose} aria-label="Закрыть модальное окно">
           ✕
         </button>
 
         {step === 1 && (
           <form className="checkout-form" onSubmit={handleNext}>
             <h2>Оплата и доставка</h2>
-            <p className="fund-text">
-              10% от стоимости Вашего заказа идут в фонд
-            </p>
+            <p className="fund-text">10% от стоимости Вашего заказа идут в фонд</p>
             <div className="input-group">
               <input
                 type="text"
                 placeholder="ФИО"
                 value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                aria-invalid={!!errors.name}
+                aria-describedby={errors.name ? 'name-error' : undefined}
               />
-              {errors.name && <p className="error">{errors.name}</p>}
+              {errors.name && (
+                <p id="name-error" className="error">
+                  {errors.name}
+                </p>
+              )}
             </div>
             <div className="input-group">
-              <input
-                type="tel"
-                placeholder="+7 (999) 999-99-99"
+              <IMaskInput
+                mask="+7 (000) 000-00-00"
+                placeholder="+7 (___) ___-__-__"
                 value={formData.phone}
-                onChange={(e) =>
-                  setFormData({ ...formData, phone: e.target.value })
-                }
+                onAccept={(value) => setFormData({ ...formData, phone: value })}
+                aria-invalid={!!errors.phone}
+                aria-describedby={errors.phone ? 'phone-error' : undefined}
+                style={{
+                  width: '100%',
+                  padding: '10px',
+                  border: errors.phone ? '1px solid red' : '1px solid #ccc',
+                  borderRadius: '4px',
+                  fontSize: '16px',
+                }}
               />
-              {errors.phone && <p className="error">{errors.phone}</p>}
+              {errors.phone && (
+                <p id="phone-error" className="error">
+                  {errors.phone}
+                </p>
+              )}
             </div>
             <div className="input-group">
               <input
                 type="email"
                 placeholder="Email"
                 value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                aria-invalid={!!errors.email}
+                aria-describedby={errors.email ? 'email-error' : undefined}
               />
-              {errors.email && <p className="error">{errors.email}</p>}
+              {errors.email && (
+                <p id="email-error" className="error">
+                  {errors.email}
+                </p>
+              )}
             </div>
             <div className="modal-footer">
               <p className="total">Итого: {totalSum} ₽</p>
@@ -284,32 +342,36 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
                 type="text"
                 placeholder="Адрес доставки"
                 value={formData.address}
-                onChange={(e) =>
-                  setFormData({ ...formData, address: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                aria-invalid={!!errors.address}
+                aria-describedby={errors.address ? 'address-error' : undefined}
               />
-              {errors.address && <p className="error">{errors.address}</p>}
+              {errors.address && (
+                <p id="address-error" className="error">
+                  {errors.address}
+                </p>
+              )}
             </div>
             <div className="input-group">
               <input
                 type="date"
                 value={formData.deliveryDate}
                 min={new Date().toISOString().split('T')[0]}
-                onChange={(e) =>
-                  setFormData({ ...formData, deliveryDate: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, deliveryDate: e.target.value })}
+                aria-invalid={!!errors.deliveryDate}
+                aria-describedby={errors.deliveryDate ? 'deliveryDate-error' : undefined}
               />
               {errors.deliveryDate && (
-                <p className="error">{errors.deliveryDate}</p>
+                <p id="deliveryDate-error" className="error">
+                  {errors.deliveryDate}
+                </p>
               )}
             </div>
             <div className="input-group">
               <textarea
                 placeholder="Комментарий к заказу"
                 value={formData.comment}
-                onChange={(e) =>
-                  setFormData({ ...formData, comment: e.target.value })
-                }
+                onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
               />
             </div>
             <div className="modal-footer">
@@ -328,36 +390,32 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
             <h2>Оплата и доставка</h2>
             <h3>Способ оплаты:</h3>
             <div className="payment-options">
-              <label
-                className={`payment-option ${formData.paymentMethod === 'cash' ? 'selected' : ''}`}
-              >
+              <label className={`payment-option ${formData.paymentMethod === 'cash' ? 'selected' : ''}`}>
                 <input
                   type="radio"
                   name="paymentMethod"
                   value="cash"
                   checked={formData.paymentMethod === 'cash'}
-                  onChange={() =>
-                    setFormData({ ...formData, paymentMethod: 'cash' })
-                  }
+                  onChange={() => setFormData({ ...formData, paymentMethod: 'cash' })}
+                  aria-invalid={!!errors.paymentMethod}
                 />
                 Наличными или картой при получении
               </label>
-              <label
-                className={`payment-option ${formData.paymentMethod === 'online' ? 'selected' : ''}`}
-              >
+              <label className={`payment-option ${formData.paymentMethod === 'online' ? 'selected' : ''}`}>
                 <input
                   type="radio"
                   name="paymentMethod"
                   value="online"
                   checked={formData.paymentMethod === 'online'}
-                  onChange={() =>
-                    setFormData({ ...formData, paymentMethod: 'online' })
-                  }
+                  onChange={() => setFormData({ ...formData, paymentMethod: 'online' })}
+                  aria-invalid={!!errors.paymentMethod}
                 />
                 Оплата картой на сайте
               </label>
               {errors.paymentMethod && (
-                <p className="error">{errors.paymentMethod}</p>
+                <p id="paymentMethod-error" className="error">
+                  {errors.paymentMethod}
+                </p>
               )}
             </div>
             <div className="agreement">
@@ -365,14 +423,17 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
                 <input
                   type="checkbox"
                   checked={formData.agreement}
-                  onChange={(e) =>
-                    setFormData({ ...formData, agreement: e.target.checked })
-                  }
+                  onChange={(e) => setFormData({ ...formData, agreement: e.target.checked })}
+                  aria-invalid={!!errors.agreement}
+                  aria-describedby={errors.agreement ? 'agreement-error' : undefined}
                 />
-                Оформляя заказ, я даю своё согласие на обработку персональных
-                данных и подтверждаю ознакомление с договором-офертой
+                Оформляя заказ, я даю своё согласие на обработку персональных данных и подтверждаю ознакомление с договором-офертой
               </label>
-              {errors.agreement && <p className="error">{errors.agreement}</p>}
+              {errors.agreement && (
+                <p id="agreement-error" className="error">
+                  {errors.agreement}
+                </p>
+              )}
             </div>
             <div className="modal-footer">
               <p className="total">Итого: {totalSum} ₽</p>
@@ -389,8 +450,8 @@ const CheckoutModal = ({ isOpen, onClose, cart, onConfirm, onOrderUpdate }) => {
           <div className="success-modal">
             <h2>Заказ успешно оформлен</h2>
             <div className="success-content">
-              <div className="success-thank-you " onClick={handleClose}>
-                <Button onClick={handleClose} text="Спасибо" />
+              <div className="success-thank-you">
+                <Button text="Спасибо" onClick={handleClose} />
               </div>
             </div>
           </div>

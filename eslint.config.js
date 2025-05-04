@@ -31,7 +31,7 @@ export default [
       'no-unused-vars': [
         'error',
         {
-          varsIgnorePattern: '^[A-Z_]|formatDate', // Добавляем formData
+          varsIgnorePattern: '^[A-Z_]|formatDate',
         },
       ],
       'react-refresh/only-export-components': [

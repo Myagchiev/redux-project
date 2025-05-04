@@ -4,14 +4,15 @@ import { IoIosArrowDown } from 'react-icons/io';
 import ProductCard from '../ProductCard';
 import DonationForm from './DonationForm';
 import Button from '../Button';
-import { products } from '../../data/products';
+import { Product, Bird, Grain, Products, CatalogItem, SectionConfig, ProductCategory } from '@/types/types';
+import { products } from '@/data/products';
 import catalogMixes from '../../assets/catalogMixes.png';
-import catalogFeeds from '../../assets/catalogFeeds.png';
 import catalogFeeders from '../../assets/catalogFeeders.png';
+import catalogFeeds from '../../assets/catalogFeeds.png';
 import '../../scss/forComponents/Home.scss';
 
-const Home = () => {
-  const catalogItems = useMemo(
+const Home: React.FC = () => {
+  const catalogItems: CatalogItem[] = useMemo(
     () => [
       {
         name: 'Кормушки',
@@ -25,30 +26,28 @@ const Home = () => {
         image: catalogMixes,
       },
       {
-        name: 'Отдельные виды кормов',
-        description: '(зёрен)',
-        path: '/catalog/otdelnye-vidy-kormov',
+        name: 'Зёрна',
+        description: '(отдельные виды кормов)',
+        path: '/catalog/grains',
         image: catalogFeeds,
       },
     ],
     []
   );
 
-  const getCategoryProducts = (category, count = 4) => {
-    const baseProduct = products[category]?.[0];
+  const getCategoryProducts = (category: keyof Products, count = 4): Product[] => {
+    const baseProduct = products[category]?.[0] as Product | undefined;
     if (!baseProduct) {
       return [];
     }
-    return Array(count).fill({
-      ...baseProduct,
-      id: baseProduct.id,
-    });
+    return Array(count).fill(baseProduct);
   };
 
-  const getRandomItems = (array, count = 4) => {
-    if (!array || array.length === 0) {
-      return [];
-    }
+  const getRandomItems = <T extends { id: number }>(
+    array: T[] | undefined,
+    count = 4
+  ): T[] => {
+    if (!array || array.length === 0) return [];
     const shuffled = [...array].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, Math.min(count, array.length));
   };
@@ -56,14 +55,14 @@ const Home = () => {
   const productsData = useMemo(
     () => ({
       mixesProducts: getCategoryProducts('gotovye-miksy'),
-      birdsProducts: getRandomItems(products.bird),
-      grainsProducts: getRandomItems(products.grains),
+      birdsProducts: getRandomItems<Bird>(products.bird),
+      grainsProducts: getRandomItems<Grain>(products.grains),
       feedersProducts: getCategoryProducts('kormushki'),
     }),
     []
   );
 
-  const sections = useMemo(
+  const sections: SectionConfig[] = useMemo(
     () => [
       {
         title: 'Готовые миксы',
@@ -129,6 +128,7 @@ const Home = () => {
                   <Button
                     margin="30px 0 0 0"
                     aria-label={`Перейти к категории ${item.name}`}
+                    text="Подробнее"
                   />
                 </Link>
               </div>
@@ -152,18 +152,18 @@ const Home = () => {
             </div>
             <div className="category-section__grid">
               {section.products.length > 0 ? (
-                section.products.map((product, index) => (
+                section.products.map((product: Product | Bird | Grain, index: number) => (
                   <ProductCard
                     key={`${section.category}-${product.id}-${index}`}
+                    id={product.id.toString()}
                     name={product.name}
-                    price={product.basePrice}
+                    price={'basePrice' in product ? product.basePrice : undefined}
                     showPrice={section.showPrice}
                     image={product.image}
                     description={product.description}
                     showWeights={section.showWeights}
                     showCart={section.showCart}
-                    id={product.id}
-                    category={section.category}
+                    category={section.category as ProductCategory}
                     isBird={section.isBird}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   />

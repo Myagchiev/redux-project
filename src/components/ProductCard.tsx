@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useState, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,31 +6,8 @@ import { addToCart } from '@/redux/cartSlice';
 import Button from '@/components/Button';
 import Notification from '@/components/Notification';
 import { weights, calculateTotalPrice } from '@/utils/weightUtils';
+import { ProductCardProps, CartItem, ProductCategory } from '@/types/types';
 import '@/scss/forComponents/ProductCard.scss';
-
-// Тип для пропсов
-interface ProductCardProps {
-  name: string;
-  price: number;
-  showPrice?: boolean;
-  image: string;
-  description: string;
-  showWeights?: boolean;
-  showCart?: boolean;
-  id: number | string;
-  category: string;
-  isBird?: boolean;
-}
-
-// Тип для элемента корзины (совместим с cartSlice.ts)
-interface CartItem {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  weight: number;
-  quantity: number;
-}
 
 const ProductCard: React.FC<ProductCardProps> = ({
   name,
@@ -44,9 +20,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   id,
   category,
   isBird = false,
+  style,
 }) => {
   const dispatch = useDispatch();
-  const [selectedWeight, setSelectedWeight] = useState<number>(weights[0]);
+  const [selectedWeight, setSelectedWeight] = useState<string>(weights[0]);
   const [showNotification, setShowNotification] = useState<boolean>(false);
 
   const totalPrice = useMemo<number | null>(
@@ -68,19 +45,19 @@ const ProductCard: React.FC<ProductCardProps> = ({
         image,
         weight: selectedWeight,
         quantity: 1,
-      })
+      } as CartItem)
     );
 
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
   };
 
-  const handleWeightChange = (weight: number) => {
+  const handleWeightChange = (weight: string) => {
     setSelectedWeight(weight);
   };
 
   return (
-    <div className={isBird ? 'bird-card' : 'product-card'}>
+    <div className={isBird ? 'bird-card' : 'product-card'} style={style}>
       <img
         src={image}
         alt={name}

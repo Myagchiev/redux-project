@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, KeyboardEvent, FormEvent } from 'react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { CiSearch, CiMenuBurger } from 'react-icons/ci';
@@ -7,64 +7,87 @@ import { FiUserPlus, FiShoppingCart, FiPhone } from 'react-icons/fi';
 import Logo from '../assets/logo.svg';
 import { categories } from '../data/categories';
 import { products } from '../data/products';
+import { Product as ProductType, Grain } from '@/types/types';
 import '../scss/forComponents/Navbar.scss';
 
-const Navbar = () => {
-  const [isCatalogOpen, setIsCatalogOpen] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const catalogRef = useRef(null);
-  const searchRef = useRef(null);
-  const mobileMenuRef = useRef(null);
+interface SearchProduct {
+  id: string;
+  name: string;
+  category: string;
+  image: string;
+}
+
+interface Category {
+  path: string;
+  name: string;
+}
+
+interface NavbarState {
+  cart: {
+    itemsCount: number;
+  };
+}
+
+const Navbar: React.FC = () => {
+  const [isCatalogOpen, setIsCatalogOpen] = useState<boolean>(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [searchResults, setSearchResults] = useState<SearchProduct[]>([]);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  const catalogRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLDivElement>(null);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
+
   const navigate = useNavigate();
   const location = useLocation();
-  const cartItemsCount = useSelector((state) => state.cart?.itemsCount || 0);
+
+  // Получение количества элементов в корзине из Redux
+  const cartItemsCount = useSelector((state: NavbarState) => state.cart?.itemsCount || 0);
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     setIsAuthenticated(!!savedUser);
 
-    const handleClickOutside = (event) => {
-      if (catalogRef.current && !catalogRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (catalogRef.current && !catalogRef.current.contains(event.target as Node)) {
         setIsCatalogOpen(false);
       }
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setSearchResults([]);
         setSearchQuery('');
       }
       if (
         mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(event.target) &&
-        !event.target.closest('.mobile-menu-toggle')
+        !mobileMenuRef.current.contains(event.target as Node) &&
+        !(event.target as Element).closest('.mobile-menu-toggle')
       ) {
         setIsMobileMenuOpen(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const handleSearch = (query) => {
+  const handleSearch = (query: string) => {
     setSearchQuery(query);
     if (query.trim() === '') {
       setSearchResults([]);
       return;
     }
 
-    const results = [];
+    const results: SearchProduct[] = [];
     Object.keys(products).forEach((category) => {
       if (category === 'bird') return;
 
-      const categoryData = categories.find(
-        (cat) => cat.path === `/catalog/${category}`
-      );
+      const categoryData = categories.find((cat) => cat.path === `/catalog/${category}`);
       const categoryName = categoryData ? categoryData.name : category;
 
-      products[category].forEach((product) => {
+      const categoryProducts = products[category as keyof typeof products] as Array<
+        ProductType | Grain
+      >;
+      categoryProducts.forEach((product) => {
         if (
           product.name.toLowerCase().includes(query.toLowerCase()) ||
           (product.description &&
@@ -72,7 +95,7 @@ const Navbar = () => {
           categoryName.toLowerCase().includes(query.toLowerCase())
         ) {
           results.push({
-            id: product.id,
+            id: product.id.toString(),
             name: product.name,
             category,
             image: product.image,
@@ -83,7 +106,7 @@ const Navbar = () => {
     setSearchResults(results.slice(0, 5));
   };
 
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (searchResults.length > 0) {
       const firstResult = searchResults[0];
@@ -125,9 +148,7 @@ const Navbar = () => {
                   cartItemsCount === 0 ? 'empty' : ''
                 }`}
               />
-              {cartItemsCount > 0 && (
-                <span className="cartCount">{cartItemsCount}</span>
-              )}
+              {cartItemsCount > 0 && <span className="cartCount">{cartItemsCount}</span>}
             </Link>
             <Link to="/login" className="profile">
               <FiUserPlus
@@ -147,7 +168,7 @@ const Navbar = () => {
               onClick={() => setIsCatalogOpen(!isCatalogOpen)}
               role="button"
               tabIndex={0}
-              onKeyDown={(e) => {
+              onKeyDown={(e: KeyboardEvent<HTMLDivElement>) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   setIsCatalogOpen(!isCatalogOpen);
                 }

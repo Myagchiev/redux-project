@@ -1,7 +1,14 @@
 import React from 'react';
 import '../scss/forComponents/Pagination.scss';
 
-const Pagination = ({
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  className?: string;
+}
+
+const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
   onPageChange,
@@ -54,7 +61,7 @@ const Pagination = ({
           <button
             key={page}
             className={`pagination__number ${currentPage === page ? 'active' : ''}`}
-            onClick={() => onPageChange(page)}
+            onClick={() => onPageChange(page as number)}
             aria-label={`Страница ${page}`}
             aria-current={currentPage === page ? 'page' : undefined}
           >

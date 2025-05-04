@@ -1,33 +1,48 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
 import Breadcrumbs from '../Breadcrumbs';
 import Button from '../Button';
 import avatar from '../../assets/avatar.png';
 import { BiEditAlt } from 'react-icons/bi';
 import '../../scss/forComponents/LoginPage.scss';
+import { Order, OrderItem } from '@/types/types';
+import { IMaskInput } from 'react-imask';
 
-const LoginPage = ({ orders: propOrders }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
-  const [orders, setOrders] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(true);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [phoneError, setPhoneError] = useState('');
-  const [passwordError, setPasswordError] = useState('');
-  const [editName, setEditName] = useState('');
-  const [editPhone, setEditPhone] = useState('');
-  const [editPassword, setEditPassword] = useState('');
-  const [editAddress, setEditAddress] = useState('');
-  const [editNameError, setEditNameError] = useState('');
-  const [editPhoneError, setEditPhoneError] = useState('');
-  const [editPasswordError, setEditPasswordError] = useState('');
-  const [editAddressError, setEditAddressError] = useState('');
+
+interface User {
+  name: string;
+  phone: string;
+  email: string;
+  password: string;
+  address: string;
+}
+
+interface LoginPageProps {
+  orders: Order[];
+}
+
+const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(true);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [phone, setPhone] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [phoneError, setPhoneError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [editName, setEditName] = useState<string>('');
+  const [editPhone, setEditPhone] = useState<string>('');
+  const [editPassword, setEditPassword] = useState<string>('');
+  const [editAddress, setEditAddress] = useState<string>('');
+  const [editNameError, setEditNameError] = useState<string>('');
+  const [editPhoneError, setEditPhoneError] = useState<string>('');
+  const [editPasswordError, setEditPasswordError] = useState<string>('');
+  const [editAddressError, setEditAddressError] = useState<string>('');
 
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
-      const parsedUser = JSON.parse(savedUser);
+      const parsedUser: User = JSON.parse(savedUser);
       setIsAuthenticated(true);
       setUser(parsedUser);
       setIsModalOpen(false);
@@ -39,7 +54,7 @@ const LoginPage = ({ orders: propOrders }) => {
     setOrders(propOrders);
   }, [propOrders]);
 
-  const validatePhone = (value) => {
+  const validatePhone = (value: string): string => {
     const phoneRegex = /^\+?\d{10,}$/;
     if (!value) {
       return 'Введите номер телефона';
@@ -50,7 +65,7 @@ const LoginPage = ({ orders: propOrders }) => {
     return '';
   };
 
-  const validatePassword = (value) => {
+  const validatePassword = (value: string): string => {
     if (!value) {
       return 'Введите пароль';
     }
@@ -60,7 +75,7 @@ const LoginPage = ({ orders: propOrders }) => {
     return '';
   };
 
-  const validateName = (value) => {
+  const validateName = (value: string): string => {
     if (!value) {
       return 'Введите ФИО';
     }
@@ -70,7 +85,7 @@ const LoginPage = ({ orders: propOrders }) => {
     return '';
   };
 
-  const validateAddress = (value) => {
+  const validateAddress = (value: string): string => {
     if (!value) {
       return 'Введите адрес';
     }
@@ -80,43 +95,43 @@ const LoginPage = ({ orders: propOrders }) => {
     return '';
   };
 
-  const handlePhoneChange = (e) => {
+  const handlePhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPhone(value);
     setPhoneError(validatePhone(value));
   };
 
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setPassword(value);
     setPasswordError(validatePassword(value));
   };
 
-  const handleEditNameChange = (e) => {
+  const handleEditNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEditName(value);
     setEditNameError(validateName(value));
   };
 
-  const handleEditPhoneChange = (e) => {
+  const handleEditPhoneChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEditPhone(value);
     setEditPhoneError(validatePhone(value));
   };
 
-  const handleEditPasswordChange = (e) => {
+  const handleEditPasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEditPassword(value);
     setEditPasswordError(validatePassword(value));
   };
 
-  const handleEditAddressChange = (e) => {
+  const handleEditAddressChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setEditAddress(value);
     setEditAddressError(validateAddress(value));
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = (e: FormEvent) => {
     e.preventDefault();
     const phoneErr = validatePhone(phone);
     const passErr = validatePassword(password);
@@ -133,7 +148,7 @@ const LoginPage = ({ orders: propOrders }) => {
       return;
     }
 
-    const newUser = {
+    const newUser: User = {
       email: `${phone}@example.com`,
       phone,
       name: 'Николаев Николай Николаевич',
@@ -148,7 +163,7 @@ const LoginPage = ({ orders: propOrders }) => {
     setPassword('');
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = (e: FormEvent) => {
     e.preventDefault();
     const phoneErr = validatePhone(phone);
     const passErr = validatePassword(password);
@@ -165,7 +180,7 @@ const LoginPage = ({ orders: propOrders }) => {
       return;
     }
 
-    const parsedUser = JSON.parse(savedUser);
+    const parsedUser: User = JSON.parse(savedUser);
     if (parsedUser.phone === phone && parsedUser.password === password) {
       setIsAuthenticated(true);
       setUser(parsedUser);
@@ -177,7 +192,7 @@ const LoginPage = ({ orders: propOrders }) => {
     }
   };
 
-  const handleEditProfile = (e) => {
+  const handleEditProfile = (e: FormEvent) => {
     e.preventDefault();
     const nameErr = validateName(editName);
     const phoneErr = validatePhone(editPhone);
@@ -192,8 +207,8 @@ const LoginPage = ({ orders: propOrders }) => {
       return;
     }
 
-    const updatedUser = {
-      ...user,
+    const updatedUser: User = {
+      ...user!,
       name: editName,
       phone: editPhone,
       password: editPassword,
@@ -217,29 +232,29 @@ const LoginPage = ({ orders: propOrders }) => {
     setIsModalOpen(true);
   };
 
-  const handleCancelOrder = (orderId) => {
+  const handleCancelOrder = (orderId: string) => {
     const savedOrders = localStorage.getItem('orders');
     let allOrders = savedOrders ? JSON.parse(savedOrders) : [];
-    allOrders = allOrders.filter((order) => order.id !== orderId);
+    allOrders = allOrders.filter((order: Order) => order.id !== orderId);
     localStorage.setItem('orders', JSON.stringify(allOrders));
     setOrders(allOrders);
   };
 
-  const handleCancelItem = (orderId, itemId, itemWeight) => {
+  const handleCancelItem = (orderId: string, itemId: string, itemWeight: string) => {
     const savedOrders = localStorage.getItem('orders');
     let allOrders = savedOrders ? JSON.parse(savedOrders) : [];
-    const orderIndex = allOrders.findIndex((order) => order.id === orderId);
+    const orderIndex = allOrders.findIndex((order: Order) => order.id === orderId);
     if (orderIndex === -1) return;
 
     allOrders[orderIndex].items = allOrders[orderIndex].items.filter(
-      (item) => !(item.id === itemId && item.weight === itemWeight)
+      (item: OrderItem) => !(item.id === itemId && item.weight === itemWeight)
     );
 
     if (allOrders[orderIndex].items.length === 0) {
-      allOrders = allOrders.filter((order) => order.id !== orderId);
+      allOrders = allOrders.filter((order: Order) => order.id !== orderId);
     } else {
       allOrders[orderIndex].total = allOrders[orderIndex].items.reduce(
-        (sum, item) => sum + item.price * item.quantity,
+        (sum: number, item: OrderItem) => sum + item.price * item.quantity,
         0
       );
     }
@@ -248,7 +263,7 @@ const LoginPage = ({ orders: propOrders }) => {
     setOrders(allOrders);
   };
 
-  const handleCardClick = (orderId) => {
+  const handleCardClick = (orderId: string) => {
     if (window.confirm('Вы уверены, что хотите отменить заказ?')) {
       handleCancelOrder(orderId);
     }
@@ -263,10 +278,10 @@ const LoginPage = ({ orders: propOrders }) => {
   };
 
   const openEditModal = () => {
-    setEditName(user.name);
-    setEditPhone(user.phone);
-    setEditPassword(user.password);
-    setEditAddress(user.address || 'Москва, ул. Примерная, д. 123');
+    setEditName(user!.name);
+    setEditPhone(user!.phone);
+    setEditPassword(user!.password);
+    setEditAddress(user!.address || 'Москва, ул. Примерная, д. 123');
     setIsEditModalOpen(true);
   };
 
@@ -296,12 +311,13 @@ const LoginPage = ({ orders: propOrders }) => {
                 <h2>Вход в аккаунт</h2>
                 <form className="login-form">
                   <div className="input-group">
-                    <input
-                      type="tel"
-                      placeholder="+7 (999) 999-99-99"
-                      value={phone}
-                      onChange={handlePhoneChange}
-                    />
+                  <IMaskInput
+                    mask="+7 (000) 000-00-00"
+                    placeholder="+7 (999) 999-99-99"
+                    value={phone}
+                    onAccept={(value: any) => handlePhoneChange({ target: { value } } as any)}
+                    overwrite
+                  />
                     {phoneError && <p className="error">{phoneError}</p>}
                   </div>
                   <div className="input-group">
@@ -358,19 +374,19 @@ const LoginPage = ({ orders: propOrders }) => {
                   onClick={openEditModal}
                   size={30}
                 />
-                <p className="profile-name">{user.name}</p>
+                <p className="profile-name">{user?.name}</p>
                 <p className="profile-phone">
                   phone:{' '}
-                  {user.phone || (
+                  {user?.phone || (
                     <span className="add-phone">Добавить телефон</span>
                   )}
                 </p>
-                <p className="profile-email">{user.email}</p>
+                <p className="profile-email">{user?.email}</p>
               </div>
             </div>
             <h3>Адрес:</h3>
             <div className="profile-address">
-              <p>{user.address || 'Москва, ул. Примерная, д. 123'}</p>
+              <p>{user?.address || 'Москва, ул. Примерная, д. 123'}</p>
             </div>
             <Button text="Выйти" backgroundColor="red" onClick={handleLogout} />
           </div>
@@ -467,11 +483,12 @@ const LoginPage = ({ orders: propOrders }) => {
                 {editNameError && <p className="error">{editNameError}</p>}
               </div>
               <div className="input-group">
-                <input
-                  type="tel"
-                  placeholder="+7 (999) 999-99-99"
-                  value={editPhone}
-                  onChange={handleEditPhoneChange}
+              <IMaskInput
+                mask="+7 (000) 000-00-00"
+                placeholder="+7 (999) 999-99-99"
+                value={editPhone}
+                onAccept={(value: any) => handleEditPhoneChange({ target: { value } } as any)}
+                overwrite
                 />
                 {editPhoneError && <p className="error">{editPhoneError}</p>}
               </div>

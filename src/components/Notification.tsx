@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
 import '../scss/forComponents/Notification.scss';
 
-const Notification = ({ message, onClose }) => {
-  const [isVisible, setIsVisible] = useState(true);
+interface NotificationProps {
+  message: string;
+  onClose: () => void;
+}
+
+const Notification: React.FC<NotificationProps> = ({ message, onClose }) => {
+  const [isVisible, setIsVisible] = useState<boolean>(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {

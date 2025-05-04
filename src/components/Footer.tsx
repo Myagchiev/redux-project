@@ -1,9 +1,12 @@
+import { FC } from 'react';
 import '../scss/forComponents/Footer.scss';
 import FooterPhone from '../assets/footerPhone.svg';
 import VK from '../assets/vk.svg';
 import Inst from '../assets/inst.svg';
 
-const Footer = () => {
+interface FooterProps {}
+
+const Footer: FC<FooterProps> = () => {
   return (
     <footer className="footer">
       <div className="container">
@@ -17,7 +20,7 @@ const Footer = () => {
         </div>
         <div className="footer__right">
           <img src={FooterPhone} alt="Иконка телефона" />
-          <span> 8 920 999 43 50</span>
+          <span>8 920 999 43 50</span>
         </div>
       </div>
     </footer>

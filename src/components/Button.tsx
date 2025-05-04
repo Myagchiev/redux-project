@@ -1,30 +1,16 @@
-import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { CSSProperties } from 'react';
+import { ButtonProps } from '@/types/types';
 import '@/scss/forComponents/Button.scss';
-
-// Интерфейс для пропсов
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  text?: string;
-  color?: string;
-  width?: string;
-  height?: string;
-  padding?: string;
-  backgroundColor?: string;
-  border?: string;
-  borderColor?: string;
-  margin?: string;
-}
 
 const Button: React.FC<ButtonProps> = ({
   text = 'Подробнее',
   color = '#fff',
-  width = 'auto',
-  height = 'auto',
   padding = '12px 32px',
   backgroundColor = 'var(--main-green-color)',
   border = 'none',
-  borderColor,
   margin = '0',
+  'aria-label': ariaLabel,
   ...props
 }) => {
   const [isMobile, setIsMobile] = useState<boolean>(false);
@@ -39,19 +25,21 @@ const Button: React.FC<ButtonProps> = ({
     return () => mediaQuery.removeEventListener('change', handleResize);
   }, []);
 
-  const buttonStyles: React.CSSProperties = {
-    width,
-    height,
+  const buttonStyles: CSSProperties = {
     padding,
     backgroundColor,
     color,
     border,
     margin: isMobile ? '10px 0 0' : margin,
-    borderColor,
   };
 
   return (
-    <button className="custom-button" style={buttonStyles} {...props}>
+    <button
+      className="custom-button"
+      style={buttonStyles}
+      aria-label={ariaLabel || (text ? undefined : 'Кнопка действия')}
+      {...props}
+    >
       {text}
     </button>
   );

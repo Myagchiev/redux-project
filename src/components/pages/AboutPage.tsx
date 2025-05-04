@@ -6,25 +6,13 @@ import ivan from '../../assets/team-ivan.jpg';
 import maria from '../../assets/team-maria.jpg';
 import '../../scss/forComponents/AboutPage.scss';
 
-// Define the type for team members
 interface TeamMember {
   name: string;
   role: string;
-  image: string; // Assuming the images are imported as strings (URLs)
+  image: string;
 }
-
-// Define the props for the Button component (if needed)
-interface ButtonProps {
-  text: string;
-  backgroundColor: string;
-  onClick: () => void;
-}
-
-// If Breadcrumbs or Button have specific props, you can define them similarly
-// For now, assuming they don't need props or are typed elsewhere
 
 const AboutPage: React.FC = () => {
-  // Team members array with explicit type
   const teamMembers: TeamMember[] = [
     {
       name: 'Анна',
