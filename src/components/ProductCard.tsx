@@ -37,13 +37,15 @@ const ProductCard: React.FC<ProductCardProps> = ({
       return;
     }
 
+    const normalizedWeight = selectedWeight.replace(/\s/g, '');
+
     dispatch(
       addToCart({
         id: `${category}-${id}`,
         name,
         price: totalPrice,
         image,
-        weight: selectedWeight,
+        weight: normalizedWeight,
         quantity: 1,
       } as CartItem)
     );

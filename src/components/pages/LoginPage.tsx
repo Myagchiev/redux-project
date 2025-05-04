@@ -6,7 +6,7 @@ import { BiEditAlt } from 'react-icons/bi';
 import '../../scss/forComponents/LoginPage.scss';
 import { Order, OrderItem } from '@/types/types';
 import { IMaskInput } from 'react-imask';
-
+import { v4 as uuidv4 } from 'uuid';
 
 interface User {
   name: string;
@@ -39,6 +39,10 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
   const [editPasswordError, setEditPasswordError] = useState<string>('');
   const [editAddressError, setEditAddressError] = useState<string>('');
 
+  const normalizeWeight = (weight: string): string => {
+    return weight.replace(/\s/g, '').toLowerCase();
+  };
+
   useEffect(() => {
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
@@ -50,9 +54,37 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
   }, []);
 
   useEffect(() => {
-    console.log('propOrders in LoginPage:', propOrders);
-    setOrders(propOrders);
-  }, [propOrders]);
+    const savedOrders = localStorage.getItem('orders');
+    let allOrders: Order[] = savedOrders ? JSON.parse(savedOrders) : [];
+
+    allOrders = allOrders.map((order: Order) => ({
+      ...order,
+      items: order.items.map((item: OrderItem) => {
+        const uniqueId = item.uniqueId || uuidv4();
+        if (
+          item.id.includes('-') &&
+          item.id.split('-').length === 3 &&
+          !item.id.includes('uuid')
+        ) {
+          const [category, id, weight] = item.id.split('-');
+          return {
+            ...item,
+            id: `${category}-${id}`,
+            weight: normalizeWeight(weight || item.weight || ''),
+            uniqueId,
+          };
+        }
+        return {
+          ...item,
+          weight: normalizeWeight(item.weight || ''),
+          uniqueId,
+        };
+      }),
+    }));
+
+    localStorage.setItem('orders', JSON.stringify(allOrders));
+    setOrders(allOrders);
+  }, []);
 
   const validatePhone = (value: string): string => {
     const phoneRegex = /^\+?\d{10,}$/;
@@ -233,34 +265,48 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
   };
 
   const handleCancelOrder = (orderId: string) => {
+    console.log('Cancel order:', { orderId });
     const savedOrders = localStorage.getItem('orders');
-    let allOrders = savedOrders ? JSON.parse(savedOrders) : [];
+    let allOrders: Order[] = savedOrders ? JSON.parse(savedOrders) : [];
     allOrders = allOrders.filter((order: Order) => order.id !== orderId);
     localStorage.setItem('orders', JSON.stringify(allOrders));
     setOrders(allOrders);
   };
 
-  const handleCancelItem = (orderId: string, itemId: string, itemWeight: string) => {
+  const handleCancelItem = (orderId: string, uniqueId: string) => {
+    console.log('Cancel item:', { orderId, uniqueId });
     const savedOrders = localStorage.getItem('orders');
-    let allOrders = savedOrders ? JSON.parse(savedOrders) : [];
+    let allOrders: Order[] = savedOrders ? JSON.parse(savedOrders) : [];
+    console.log('All orders before:', JSON.stringify(allOrders, null, 2));
+
     const orderIndex = allOrders.findIndex((order: Order) => order.id === orderId);
-    if (orderIndex === -1) return;
+    if (orderIndex === -1) {
+      console.log('Order not found:', orderId);
+      return;
+    }
 
     allOrders[orderIndex].items = allOrders[orderIndex].items.filter(
-      (item: OrderItem) => !(item.id === itemId && item.weight === itemWeight)
+      (item: OrderItem) => item.uniqueId !== uniqueId
+    );
+    console.log(
+      'Items after filter:',
+      JSON.stringify(allOrders[orderIndex].items, null, 2)
     );
 
     if (allOrders[orderIndex].items.length === 0) {
       allOrders = allOrders.filter((order: Order) => order.id !== orderId);
+      console.log('Order removed as it has no items');
     } else {
       allOrders[orderIndex].total = allOrders[orderIndex].items.reduce(
         (sum: number, item: OrderItem) => sum + item.price * item.quantity,
         0
       );
+      console.log('Updated order total:', allOrders[orderIndex].total);
     }
 
+    console.log('All orders after:', JSON.stringify(allOrders, null, 2));
     localStorage.setItem('orders', JSON.stringify(allOrders));
-    setOrders(allOrders);
+    setOrders([...allOrders]);
   };
 
   const handleCardClick = (orderId: string) => {
@@ -311,13 +357,15 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
                 <h2>Вход в аккаунт</h2>
                 <form className="login-form">
                   <div className="input-group">
-                  <IMaskInput
-                    mask="+7 (000) 000-00-00"
-                    placeholder="+7 (999) 999-99-99"
-                    value={phone}
-                    onAccept={(value: any) => handlePhoneChange({ target: { value } } as any)}
-                    overwrite
-                  />
+                    <IMaskInput
+                      mask="+7 (000) 000-00-00"
+                      placeholder="+7 (999) 999-99-99"
+                      value={phone}
+                      onAccept={(value: any) =>
+                        handlePhoneChange({ target: { value } } as any)
+                      }
+                      overwrite
+                    />
                     {phoneError && <p className="error">{phoneError}</p>}
                   </div>
                   <div className="input-group">
@@ -424,10 +472,7 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
                         </div>
                       </div>
                       {order.items.map((item) => (
-                        <div
-                          key={`${item.id}-${item.weight}`}
-                          className="cart-item"
-                        >
+                        <div key={item.uniqueId} className="cart-item">
                           <img
                             src={item.image}
                             alt={item.name}
@@ -446,11 +491,7 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
                               backgroundColor="red"
                               onClick={(e) => {
                                 e.stopPropagation();
-                                handleCancelItem(
-                                  order.id,
-                                  item.id,
-                                  item.weight
-                                );
+                                handleCancelItem(order.id, item.uniqueId);
                               }}
                             />
                           </div>
@@ -483,12 +524,14 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
                 {editNameError && <p className="error">{editNameError}</p>}
               </div>
               <div className="input-group">
-              <IMaskInput
-                mask="+7 (000) 000-00-00"
-                placeholder="+7 (999) 999-99-99"
-                value={editPhone}
-                onAccept={(value: any) => handleEditPhoneChange({ target: { value } } as any)}
-                overwrite
+                <IMaskInput
+                  mask="+7 (000) 000-00-00"
+                  placeholder="+7 (999) 999-99-99"
+                  value={editPhone}
+                  onAccept={(value: any) =>
+                    handleEditPhoneChange({ target: { value } } as any)
+                  }
+                  overwrite
                 />
                 {editPhoneError && <p className="error">{editPhoneError}</p>}
               </div>
@@ -510,9 +553,7 @@ const LoginPage = ({ orders: propOrders }: LoginPageProps) => {
                   value={editAddress}
                   onChange={handleEditAddressChange}
                 />
-                {editAddressError && (
-                  <p className="error">{editAddressError}</p>
-                )}
+                {editAddressError && <p className="error">{editAddressError}</p>}
               </div>
               <Button
                 text="Сохранить"

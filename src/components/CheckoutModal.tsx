@@ -2,7 +2,8 @@ import { useState, FormEvent } from 'react';
 import { IMaskInput } from 'react-imask';
 import Button from './Button';
 import '../scss/forComponents/CheckoutModal.scss';
-import { CartItem, Order } from '../types/types';
+import { CartItem, Order, OrderItem } from '../types/types';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Cart {
   items: CartItem[];
@@ -188,13 +189,23 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
 
   const handleConfirm = () => {
     const cleanedPhone = formData.phone.replace(/\D/g, '');
-    const formattedPhone = cleanedPhone.startsWith('7') 
-      ? `+${cleanedPhone}` 
+    const formattedPhone = cleanedPhone.startsWith('7')
+      ? `+${cleanedPhone}`
       : `+7${cleanedPhone}`;
+
+    const orderItems: OrderItem[] = cart.items.map((item) => ({
+      id: item.id,
+      name: item.name,
+      image: item.image,
+      weight: item.weight,
+      price: item.price,
+      quantity: item.quantity,
+      uniqueId: item.uniqueId || uuidv4(),
+    }));
 
     const order: Order = {
       id: `order-${Date.now()}`,
-      items: cart.items,
+      items: orderItems,
       total: totalSum,
       date: new Date().toISOString().split('T')[0],
       userEmail: formData.email,
@@ -263,20 +274,28 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <button className="modal-close" onClick={handleClose} aria-label="Закрыть модальное окно">
+        <button
+          className="modal-close"
+          onClick={handleClose}
+          aria-label="Закрыть модальное окно"
+        >
           ✕
         </button>
 
         {step === 1 && (
           <form className="checkout-form" onSubmit={handleNext}>
             <h2>Оплата и доставка</h2>
-            <p className="fund-text">10% от стоимости Вашего заказа идут в фонд</p>
+            <p className="fund-text">
+              10% от стоимости Вашего заказа идут в фонд
+            </p>
             <div className="input-group">
               <input
                 type="text"
                 placeholder="ФИО"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 aria-invalid={!!errors.name}
                 aria-describedby={errors.name ? 'name-error' : undefined}
               />
@@ -291,7 +310,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 mask="+7 (000) 000-00-00"
                 placeholder="+7 (___) ___-__-__"
                 value={formData.phone}
-                onAccept={(value) => setFormData({ ...formData, phone: value })}
+                onAccept={(value) =>
+                  setFormData({ ...formData, phone: value })
+                }
                 aria-invalid={!!errors.phone}
                 aria-describedby={errors.phone ? 'phone-error' : undefined}
               />
@@ -306,7 +327,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 type="email"
                 placeholder="Email"
                 value={formData.email}
-                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, email: e.target.value })
+                }
                 aria-invalid={!!errors.email}
                 aria-describedby={errors.email ? 'email-error' : undefined}
               />
@@ -335,7 +358,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 type="text"
                 placeholder="Адрес доставки"
                 value={formData.address}
-                onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
                 aria-invalid={!!errors.address}
                 aria-describedby={errors.address ? 'address-error' : undefined}
               />
@@ -350,9 +375,13 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 type="date"
                 value={formData.deliveryDate}
                 min={new Date().toISOString().split('T')[0]}
-                onChange={(e) => setFormData({ ...formData, deliveryDate: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, deliveryDate: e.target.value })
+                }
                 aria-invalid={!!errors.deliveryDate}
-                aria-describedby={errors.deliveryDate ? 'deliveryDate-error' : undefined}
+                aria-describedby={
+                  errors.deliveryDate ? 'deliveryDate-error' : undefined
+                }
               />
               {errors.deliveryDate && (
                 <p id="deliveryDate-error" className="error">
@@ -364,7 +393,9 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
               <textarea
                 placeholder="Комментарий к заказу"
                 value={formData.comment}
-                onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, comment: e.target.value })
+                }
               />
             </div>
             <div className="modal-footer">
@@ -383,24 +414,36 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
             <h2>Оплата и доставка</h2>
             <h3>Способ оплаты:</h3>
             <div className="payment-options">
-              <label className={`payment-option ${formData.paymentMethod === 'cash' ? 'selected' : ''}`}>
+              <label
+                className={`payment-option ${
+                  formData.paymentMethod === 'cash' ? 'selected' : ''
+                }`}
+              >
                 <input
                   type="radio"
                   name="paymentMethod"
                   value="cash"
                   checked={formData.paymentMethod === 'cash'}
-                  onChange={() => setFormData({ ...formData, paymentMethod: 'cash' })}
+                  onChange={() =>
+                    setFormData({ ...formData, paymentMethod: 'cash' })
+                  }
                   aria-invalid={!!errors.paymentMethod}
                 />
                 Наличными или картой при получении
               </label>
-              <label className={`payment-option ${formData.paymentMethod === 'online' ? 'selected' : ''}`}>
+              <label
+                className={`payment-option ${
+                  formData.paymentMethod === 'online' ? 'selected' : ''
+                }`}
+              >
                 <input
                   type="radio"
                   name="paymentMethod"
                   value="online"
                   checked={formData.paymentMethod === 'online'}
-                  onChange={() => setFormData({ ...formData, paymentMethod: 'online' })}
+                  onChange={() =>
+                    setFormData({ ...formData, paymentMethod: 'online' })
+                  }
                   aria-invalid={!!errors.paymentMethod}
                 />
                 Оплата картой на сайте
@@ -416,11 +459,16 @@ const CheckoutModal: React.FC<CheckoutModalProps> = ({
                 <input
                   type="checkbox"
                   checked={formData.agreement}
-                  onChange={(e) => setFormData({ ...formData, agreement: e.target.checked })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, agreement: e.target.checked })
+                  }
                   aria-invalid={!!errors.agreement}
-                  aria-describedby={errors.agreement ? 'agreement-error' : undefined}
+                  aria-describedby={
+                    errors.agreement ? 'agreement-error' : undefined
+                  }
                 />
-                Оформляя заказ, я даю своё согласие на обработку персональных данных и подтверждаю ознакомление с договором-офертой
+                Оформляя заказ, я даю своё согласие на обработку персональных
+                данных и подтверждаю ознакомление с договором-офертой
               </label>
               {errors.agreement && (
                 <p id="agreement-error" className="error">

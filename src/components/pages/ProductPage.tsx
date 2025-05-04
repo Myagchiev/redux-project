@@ -8,7 +8,7 @@ import Button from '../Button';
 import ProductCard from '../ProductCard';
 import AvatarSlider from '../AvatarSlider';
 import Notification from '../Notification';
-import { Product, Bird, Grain, Products, ProductCardProps, ProductCategory, RouteParams, CartItem, ButtonProps } from '@/types/types';
+import { Product, Bird, Grain, Products, ProductCardProps, ProductCategory, RouteParams, CartItem } from '@/types/types';
 import { products } from '@/data/products';
 import { weights, calculateTotalPrice } from '../../utils/weightUtils';
 import '../../scss/forComponents/ProductPage.scss';
@@ -81,13 +81,14 @@ const ProductPage: React.FC = () => {
     if (!id || !category || !totalPrice || !selectedWeight || !quantity) {
       return;
     }
+    const normalizedWeight = selectedWeight.replace(/\s/g, '');
     dispatch(
       addToCart({
         id: `${category}-${id}`,
         name: product.name,
         price: totalPrice / quantity,
         image: product.image || '',
-        weight: selectedWeight,
+        weight: normalizedWeight,
         quantity,
       } as CartItem)
     );

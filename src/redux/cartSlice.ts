@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction, Middleware } from '@reduxjs/toolkit';
 import { debounce } from 'lodash';
-import { CartItem } from '../types/types'
+import { CartItem } from '../types/types';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface CartState {
   items: CartItem[];
@@ -9,7 +10,26 @@ export interface CartState {
 
 const loadCartFromStorage = (): CartState => {
   const savedCart = localStorage.getItem('cart');
-  return savedCart ? JSON.parse(savedCart) : { items: [], itemsCount: 0 };
+  if (!savedCart) return { items: [], itemsCount: 0 };
+  const cart = JSON.parse(savedCart);
+  return {
+    ...cart,
+    items: cart.items.map((item: CartItem) => {
+      if (item.id.includes('-') && item.id.split('-').length === 3) {
+        const [category, id, weight] = item.id.split('-');
+        return {
+          ...item,
+          id: `${category}-${id}`,
+          weight: weight || item.weight,
+          uniqueId: item.uniqueId || uuidv4(),
+        };
+      }
+      return {
+        ...item,
+        uniqueId: item.uniqueId || uuidv4(),
+      };
+    }),
+  };
 };
 
 const saveCartToStorage = debounce((cart: CartState) => {
@@ -34,7 +54,15 @@ const cartSlice = createSlice({
         existingItem.quantity += quantity;
         state.itemsCount += quantity;
       } else {
-        state.items.push({ id, weight, quantity, price, name, image });
+        state.items.push({
+          id,
+          weight,
+          quantity,
+          price,
+          name,
+          image,
+          uniqueId: uuidv4(),
+        });
         state.itemsCount += quantity;
       }
     },
@@ -43,7 +71,7 @@ const cartSlice = createSlice({
       if (!id || !weight) return;
 
       const itemToRemove = state.items.find(
-        item => item.id === id && item.weight === weight
+        (item) => item.id === id && item.weight === weight
       );
       if (!itemToRemove) return;
 
@@ -60,7 +88,7 @@ const cartSlice = createSlice({
       if (!id || !weight || typeof delta !== 'number') return;
 
       const itemToUpdate = state.items.find(
-        item => item.id === id && item.weight === weight
+        (item) => item.id === id && item.weight === weight
       );
       if (!itemToUpdate) return;
 

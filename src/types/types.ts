@@ -7,11 +7,12 @@ export interface CartItem {
   quantity: number;
   weight: string;
   image: string;
+  uniqueId: string;
 }
 
 export interface Order {
   id: string;
-  items: CartItem[];
+  items: OrderItem[];
   total: number;
   date: string;
   userEmail?: string;
@@ -32,6 +33,7 @@ export interface OrderItem {
   weight: string;
   price: number;
   quantity: number;
+  uniqueId: string;
 }
 
 export interface ProductCardProps {
